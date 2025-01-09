@@ -1,0 +1,16 @@
+{
+  "name": "Marvin-bot",
+  "version": "0.0.1",
+  "description": "bot oficial da comunidade Nucleo 42",
+  "main": "index.js",
+  "repository": "https://github.com/Nucleo42/discord-bot",
+  "author": "42-team, parlandim",
+  "license": "GPL-3.0",
+  "private": false,
+  "scripts": {
+    "start": "node index.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}
