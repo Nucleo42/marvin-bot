@@ -1,1 +1,1 @@
-console.log(process.env.TESTE)
+console.log(process.env.TESTE);
