@@ -1,16 +1,28 @@
 {
-  "name": "Marvin-bot",
+  "name": "marvin-bot",
   "version": "0.0.1",
   "description": "bot oficial da comunidade Nucleo 42",
-  "main": "index.js",
+  "main": "dist/index.js",
   "repository": "https://github.com/Nucleo42/discord-bot",
-  "author": "42-team, parlandim",
+  "author": "Nucleo 42-team, parlandim",
   "license": "GPL-3.0",
   "private": false,
+  "engines": {
+    "node": ">=20.18.0"
+  },
   "scripts": {
-    "start": "node index.js"
+    "dev": "node --env-file=.env  --watch -r ts-node/register -r tsconfig-paths/register src/index.ts",
+    "start": "node .",
+    "build": "tsc "
   },
   "devDependencies": {
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "bufferutil": "^4.0.9",
+    "discord.js": "^14.17.3",
+    "zlib-sync": "^0.1.9"
   }
 }
