@@ -22,7 +22,7 @@ export class ClientDiscord extends Client {
   public commands: Collection<string, CommandType> = new Collection();
   public buttons: ComponentsButton = new Collection();
   public select: ComponentsSelect = new Collection();
-  public modal: ComponentsModal = new Collection();
+  public modals: ComponentsModal = new Collection();
 
   constructor() {
     super({
@@ -89,7 +89,7 @@ export class ClientDiscord extends Client {
             }
 
             if (modals) {
-              modals.forEach((execute, key) => this.modal.set(key, execute));
+              modals.forEach((execute, key) => this.modals.set(key, execute));
             }
           }
         });
