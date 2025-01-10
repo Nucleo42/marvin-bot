@@ -87,7 +87,7 @@ export class ProfileCardCanvas {
 
     this.ctx.beginPath();
     this.ctx.roundRect(x, y, width, height, borderRadius);
-    this.ctx.fillStyle = isGreen ? "#059669" : "#4B5563";
+    this.ctx.fillStyle = isGreen ? "#059669" : "#B22222";
     this.ctx.fill();
 
     this.ctx.fillStyle = "#FFFFFF";
