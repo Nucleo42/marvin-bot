@@ -16,6 +16,7 @@
       "@events/*": ["src/events/*"],
       "@handlers/*": ["src/handlers/*"],
       "@structures/*": ["src/structures/*"],
+      "@utilities/*": ["src/utilities/*"],
     }, // A series of entries which re-map imports to lookup locations relative to the baseUrl
     // Source Map
     "sourceMap": true, // enables the use of source maps for debuggers and error reporting etc
