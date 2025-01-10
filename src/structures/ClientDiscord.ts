@@ -17,6 +17,7 @@ import Logging from "./Logging";
 import path from "path";
 import fs from "fs";
 import { EventTypes } from "@structures/types/events";
+import { isDev } from "@utilities/isDev";
 
 export class ClientDiscord extends Client {
   public commands: Collection<string, CommandType> = new Collection();
@@ -66,34 +67,40 @@ export class ClientDiscord extends Client {
 
     const commandsPath = path.join(__dirname, "..", "commands");
 
-    fs.readdirSync(commandsPath).forEach((directory) => {
-      fs.readdirSync(commandsPath + "/" + directory)
-        .filter(this.getFilterFiles)
-        .forEach(async (file) => {
-          const commands: CommandType = (
-            await import(`@commands/${directory}/${file}`)
-          )?.default;
+    fs.readdirSync(commandsPath)
+      .filter((folder) => (isDev ? true : !folder.endsWith("development")))
+      .forEach((directory) => {
+        fs.readdirSync(commandsPath + "/" + directory)
+          .filter(this.getFilterFiles)
+          .forEach(async (file) => {
+            const commands: CommandType = (
+              await import(`@commands/${directory}/${file}`)
+            )?.default;
 
-          const { name, buttons, selects, modals } = commands;
+            const { name, buttons, selects, modals } = commands;
 
-          if (name) {
-            this.commands.set(name, commands);
-            slashCommands.push(commands);
+            if (name) {
+              this.commands.set(name, commands);
+              slashCommands.push(commands);
 
-            if (buttons) {
-              buttons.forEach((execute, key) => this.buttons.set(key, execute));
+              if (buttons) {
+                buttons.forEach((execute, key) =>
+                  this.buttons.set(key, execute),
+                );
+              }
+
+              if (selects) {
+                selects.forEach((execute, key) =>
+                  this.select.set(key, execute),
+                );
+              }
+
+              if (modals) {
+                modals.forEach((execute, key) => this.modals.set(key, execute));
+              }
             }
-
-            if (selects) {
-              selects.forEach((execute, key) => this.select.set(key, execute));
-            }
-
-            if (modals) {
-              modals.forEach((execute, key) => this.modals.set(key, execute));
-            }
-          }
-        });
-    });
+          });
+      });
 
     this.on("ready", () => this.registerCommands(slashCommands));
   }
