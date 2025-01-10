@@ -120,5 +120,7 @@ export class ClientDiscord extends Client {
           }
         });
     });
+
+    Logging.success("Events registered!");
   }
 }

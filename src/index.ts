@@ -10,10 +10,6 @@ client
   })
   .catch((err) => Logging.error(err));
 
-client.on("ready", () => {
-  Logging.success("Bot is ready!");
-});
-
 process.on("unhandledRejection", (reason, promise) => {
   try {
     console.error(
