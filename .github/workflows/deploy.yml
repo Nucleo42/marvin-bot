@@ -83,6 +83,13 @@ jobs:
             .yarn/cache
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
 
+      - name: Create .env file
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          echo -e "DISCORD_TOKEN=$DISCORD_TOKEN\nNODE_ENV=production\nDATABASE_URL=$DATABASE_URL" > .env
+
       - name: Build TypeScript
         run: yarn build
 
