@@ -1,4 +1,4 @@
-import client from "src";
+import client from "../../index";
 import { Event } from "@structures/types/events";
 
 export default new Event({
