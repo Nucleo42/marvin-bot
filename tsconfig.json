@@ -3,6 +3,7 @@
     // project options
     "lib": [], // specifies which default set of type definitions to use ("DOM", "ES6", etc)
     "outDir": "dist", // .js (as well as .d.ts, .js.map, etc.) files will be emitted into this directory.,
+    "rootDir": "./src", // root directory of input files
     "removeComments": true, // Strips all comments from TypeScript files when converting into JavaScript- you rarely read compiled code so this saves space
     "target": "ES2020", // Target environment. Most modern browsers support ES6, but you may want to set it to newer or older. (defaults to ES3)
     // Module resolution
@@ -35,6 +36,7 @@
     }, // A series of entries which re-map imports to lookup locations relative to the baseUrl
     // Source Map
     "sourceMap": false, // enables the use of source maps for debuggers and error reporting etc
+    "skipLibCheck": true,
     //"sourceRoot": "/", // Specify the location where a debugger should locate TypeScript files instead of relative source locations.
     // Strict Checks
     "alwaysStrict": true, // Ensures that your files are parsed in the ECMAScript strict mode, and emit “use strict” for each source file.
@@ -51,7 +53,7 @@
     "esm": true, // «———— enabling ESM for ts-node   
   },
   "include": [
-    "./**/*"
+    "src/**/*"
   ],
   "assets": [
     "src/assets"
