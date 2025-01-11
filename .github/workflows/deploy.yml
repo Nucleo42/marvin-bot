@@ -3,7 +3,7 @@ name: Deploy Code
 on:
   push:
     branches:
-      - main # Change to desired branch
+      - main 
 
 jobs:
   setup:
@@ -58,7 +58,7 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
       
       - name: Install dependencies
-        run: yarn install  --immutable
+        run: yarn install --immutable
 
   build:
     needs: install-dependencies
@@ -103,11 +103,8 @@ jobs:
           path: dist/
       
       - name: Create .env file
-        env:
-          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
-          echo -e "DISCORD_TOKEN=$DISCORD_TOKEN\nNODE_ENV=production\nDATABASE_URL=$DATABASE_URL" > .env
+          echo -e "DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}\nNODE_ENV=production\nDATABASE_URL=${{ secrets.DATABASE_URL }}" > .env
       
       - name: Create deployment package
         run: |
@@ -136,15 +133,12 @@ jobs:
           name: deployment-package
       
       - name: Deploy to API
-        env:
-          API_URL: ${{ secrets.API_URL }}
-          API_KEY: ${{ secrets.API_KEY }}
         run: |
-          RESPONSE=$(curl -s -w "%{http_code}" -o /dev/null -X POST \
-            -H "Authorization: Bearer $API_KEY" \
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+            -H "Authorization: Bearer ${{ secrets.API_KEY }}" \
             -F "file=@deploy.zip" \
-            "$API_URL")
+            "${{ secrets.API_URL }}")
           if [ "$RESPONSE" -ne 200 ]; then
-            echo "Deploy failed with status $RESPONSE"
+            echo "::error::Deployment failed with status $RESPONSE"
             exit 1
           fi
