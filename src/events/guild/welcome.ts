@@ -53,28 +53,43 @@ export default new Event({
 
       const attachment = canvas.getBuffer();
 
-      const row = new ActionRowBuilder<ButtonBuilder>({
-        components: [
+      const listOfButtons: ButtonBuilder[] = [];
+
+      if (rulesChannel) {
+        listOfButtons.push(
           new ButtonBuilder({
             label: "Regras",
             url: `https://discord.com/channels/${guild_id}/${rulesChannel}`,
             style: ButtonStyle.Link,
           }),
+        );
+      }
+
+      if (presentationChannel) {
+        listOfButtons.push(
           new ButtonBuilder({
             label: "Apresentação (obrigatória)",
             url: `https://discord.com/channels/${guild_id}/${presentationChannel}`,
             style: ButtonStyle.Link,
           }),
-        ],
+        );
+      }
+
+      const row = new ActionRowBuilder<ButtonBuilder>({
+        components: listOfButtons,
       });
 
       const welcomeChannel = interaction.guild.channels.cache.find(
         (channel) => channel.id === channel_id,
       );
 
+      const presentationChannelObj = interaction.guild.channels.cache.find(
+        (channel) => channel.id === presentationChannel,
+      );
+
       if (welcomeChannel?.isSendable()) {
         welcomeChannel.send({
-          content: `Bem-vindo(a) ao servidor, ${user}!`,
+          content: `Nucleo 42 te dá as boas-vindas, @${user}! Por favor, apresente-se${presentationChannelObj ? ` e deixe suas redes lá no canal ${presentationChannelObj}` : "!"} `,
           files: [attachment],
           components: [row],
         });
