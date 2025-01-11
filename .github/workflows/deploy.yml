@@ -3,7 +3,7 @@ name: Deploy Code
 on:
   push:
     branches:
-      - main 
+      - main # Change to desired branch
 
 jobs:
   setup:
@@ -11,17 +11,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20.18.0
-      
+
       - name: Install Yarn
         run: |
           corepack enable
           corepack prepare yarn@stable --activate
-      
+
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
@@ -38,17 +38,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20.18.0
-      
+
       - name: Install native dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
-      
+
       - name: Restore cache
         uses: actions/cache@v3
         with:
@@ -56,7 +56,7 @@ jobs:
             node_modules
             .yarn/cache
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-      
+
       - name: Install dependencies
         run: yarn install --immutable
 
@@ -66,12 +66,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20.18.0
-      
+
       - name: Restore cache
         uses: actions/cache@v3
         with:
@@ -79,10 +79,10 @@ jobs:
             node_modules
             .yarn/cache
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-      
+
       - name: Build TypeScript
         run: yarn build
-      
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -95,17 +95,20 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
+
       - name: Download build artifacts
         uses: actions/download-artifact@v3
         with:
           name: build-output
           path: dist/
-      
+
       - name: Create .env file
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
-          echo -e "DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}\nNODE_ENV=production\nDATABASE_URL=${{ secrets.DATABASE_URL }}" > .env
-      
+          echo -e "DISCORD_TOKEN=$DISCORD_TOKEN\nNODE_ENV=production\nDATABASE_URL=$DATABASE_URL" > .env
+
       - name: Create deployment package
         run: |
           zip -r deploy.zip \
@@ -116,7 +119,7 @@ jobs:
           package.json \
           static \
           yarn.lock
-      
+
       - name: Upload deployment package
         uses: actions/upload-artifact@v3
         with:
@@ -131,14 +134,17 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: deployment-package
-      
+
       - name: Deploy to API
+        env:
+          API_URL: ${{ secrets.API_URL }}
+          API_KEY: ${{ secrets.API_KEY }}
         run: |
-          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
-            -H "Authorization: Bearer ${{ secrets.API_KEY }}" \
+          RESPONSE=$(curl -s -w "%{http_code}" -o /dev/null -X PUT \
+            -H "api-token: $API_KEY" \
             -F "file=@deploy.zip" \
-            "${{ secrets.API_URL }}")
+            "$API_URL")
           if [ "$RESPONSE" -ne 200 ]; then
-            echo "::error::Deployment failed with status $RESPONSE"
+            echo "Deploy failed with status $RESPONSE"
             exit 1
           fi
