@@ -140,11 +140,18 @@ jobs:
           API_URL: ${{ secrets.API_URL }}
           API_KEY: ${{ secrets.API_KEY }}
         run: |
-          RESPONSE=$(curl -s -w "%{http_code}" -o /dev/null -X PUT \
-            -H "api-token: $API_KEY" \
-            -F "file=@deploy.zip" \
-            "$API_URL")
-          if [ "$RESPONSE" -ne 200 ]; then
-            echo "Deploy failed with status $RESPONSE"
+
+          if [ -z "$API_KEY" ]; then
+            echo "API_KEY is not set. Deployment cannot proceed."
             exit 1
           fi
+
+          if [ -z "$API_URL" ]; then
+            echo "API_URL is not set. Deployment cannot proceed."
+            exit 1
+          fi
+
+          curl -s -w "%{http_code}" -o /dev/null -X PUT \
+            -H "api-token: $API_KEY" \
+            -F "file=@deploy.zip" \
+            "$API_URL" | grep -q "^200$" || { echo "Deploy failed"; exit 1; }
