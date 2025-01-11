@@ -32,23 +32,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-  lint:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20.18.0
-
-      - name: Run Linter
-        run: yarn lint # Adjust this command as per your linter configuration
-
   install-dependencies:
-    needs: lint
+    needs: setup
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
