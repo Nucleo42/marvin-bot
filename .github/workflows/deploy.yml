@@ -134,7 +134,12 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: deployment-package
-
+  
+      - name: Debug Environment Variables
+        run: |
+          echo "API_URL: ${{ secrets.API_URL }}"
+          echo "API_KEY: ${{ secrets.API_KEY }}"
+  
       - name: Deploy to API
         env:
           API_URL: ${{ secrets.API_URL }}
