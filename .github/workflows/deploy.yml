@@ -6,12 +6,8 @@ on:
       - main
 
 jobs:
-  deploy:
+  setup:
     runs-on: ubuntu-latest
-    env:
-      ACTIONS_RUNTIME_TOKEN: "fake-token"
-      ACTIONS_RUNTIME_URL: "fake-url"
-      ACTIONS_CACHE_URL: "fake-cache-url"
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -26,25 +22,110 @@ jobs:
           corepack enable
           corepack prepare yarn@stable --activate
 
-      - name: Install dependencies
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            .yarn/cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+  lint:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.18.0
+
+      - name: Run Linter
+        run: yarn lint # Adjust this command as per your linter configuration
+
+  install-dependencies:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.18.0
+
+      - name: Install native dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
-          yarn install --frozen-lockfile
-          # Instalar TypeScript e outras ferramentas globalmente no container
-          yarn global add typescript@latest ts-node tsc-alias copyfiles
 
-      - name: Build and Package
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            .yarn/cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+  build:
+    needs: install-dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.18.0
+
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            .yarn/cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Build TypeScript
+        run: yarn build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-output
+          path: dist/
+
+  prepare-deployment:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-output
+          path: dist/
+
+      - name: Create .env file
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
-          # Usar yarn para executar os scripts garante que use as dependências locais
-          yarn build
+          echo -e "DISCORD_TOKEN=$DISCORD_TOKEN\nNODE_ENV=production\nDATABASE_URL=$DATABASE_URL" > .env
 
-          # Create .env file
-          echo "DISCORD_TOKEN=$DISCORD_TOKEN" > .env
-          echo "NODE_ENV=production" >> .env
-          echo "DATABASE_URL=$DATABASE_URL" >> .env
-
-          # Create zip without using artifacts
+      - name: Create deployment package
+        run: |
           zip -r deploy.zip \
           discloud.config \
           dist \
@@ -53,16 +134,32 @@ jobs:
           package.json \
           static \
           yarn.lock
-        env:
-          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-      - name: Deploy
-        run: |
-          curl -X POST \
-          -H "Authorization: Bearer $API_KEY" \
-          -F "file=@deploy.zip" \
-          "$API_URL"
+      - name: Upload deployment package
+        uses: actions/upload-artifact@v3
+        with:
+          name: deployment-package
+          path: deploy.zip
+
+  deploy:
+    needs: prepare-deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download deployment package
+        uses: actions/download-artifact@v3
+        with:
+          name: deployment-package
+
+      - name: Deploy to API
         env:
           API_URL: ${{ secrets.API_URL }}
           API_KEY: ${{ secrets.API_KEY }}
+        run: |
+          RESPONSE=$(curl -s -w "%{http_code}" -o /dev/null -X POST \
+            -H "Authorization: Bearer $API_KEY" \
+            -F "file=@deploy.zip" \
+            "$API_URL")
+          if [ "$RESPONSE" -ne 200 ]; then
+            echo "Deploy failed with status $RESPONSE"
+            exit 1
+          fi
