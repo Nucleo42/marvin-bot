@@ -1,6 +1,7 @@
 import { Event } from "@structures/types/events";
 import path from "path";
 import { ProfileCardCanvas } from "@utilities/canvas";
+import { WelcomeModel } from "@database/models/welcome.model";
 
 const image = path.join(
   __dirname,
@@ -16,30 +17,47 @@ export default new Event({
   execute: async (interaction) => {
     const user = interaction.user;
 
-    const canvas = new ProfileCardCanvas(600, 150);
+    try {
+      const db = new WelcomeModel();
+      const welcomeChannelData = await db.getWelcomeChannel(
+        interaction.guild.id,
+      );
 
-    await canvas.drawCard({
-      username: user.displayName,
-      handle: user.username,
-      statusText: "Saiu do servidor",
-      avatarPath: user.displayAvatarURL({
-        extension: "png",
-        forceStatic: true,
-      }),
-      backgroundPath: image,
-      isGreen: false,
-    });
+      if (!welcomeChannelData || welcomeChannelData.length <= 0) return;
 
-    const attachment = canvas.getBuffer();
+      if (!welcomeChannelData[0]) return;
 
-    const welcomeChannel = interaction.guild.channels.cache.find(
-      (channel) => channel.id === "channel_id",
-    );
+      const { channel_id, enabled } = welcomeChannelData[0];
 
-    if (welcomeChannel?.isSendable()) {
-      welcomeChannel.send({
-        files: [attachment],
+      if (!enabled) return;
+
+      const canvas = new ProfileCardCanvas(600, 150);
+
+      await canvas.drawCard({
+        username: user.displayName,
+        handle: user.username,
+        statusText: "Saiu do servidor",
+        avatarPath: user.displayAvatarURL({
+          extension: "png",
+          forceStatic: true,
+        }),
+        backgroundPath: image,
+        isGreen: false,
       });
+
+      const attachment = canvas.getBuffer();
+
+      const welcomeChannel = interaction.guild.channels.cache.find(
+        (channel) => channel.id === channel_id,
+      );
+
+      if (welcomeChannel?.isSendable()) {
+        welcomeChannel.send({
+          files: [attachment],
+        });
+      }
+    } catch (error) {
+      console.error(error);
     }
   },
 });
