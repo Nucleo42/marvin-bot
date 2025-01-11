@@ -5,11 +5,6 @@ labels: project
 assignees: ''
 ---
 
-## 📌 Título
-> [Breve descrição da funcionalidade, bug ou tarefa]
-
----
-
 ## 📝 Descrição
 > Uma descrição clara e detalhada do objetivo ou problema que este card resolve.
 
