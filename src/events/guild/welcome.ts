@@ -89,7 +89,7 @@ export default new Event({
 
       if (welcomeChannel?.isSendable()) {
         welcomeChannel.send({
-          content: `Nucleo 42 te dá as boas-vindas, @${user}! Por favor, apresente-se${presentationChannelObj ? ` e deixe suas redes lá no canal ${presentationChannelObj}` : "!"} `,
+          content: `Nucleo 42 te dá as boas-vindas, ${user}! Por favor, apresente-se${presentationChannelObj ? ` e deixe suas redes lá no canal ${presentationChannelObj}` : "!"} `,
           files: [attachment],
           components: [row],
         });
