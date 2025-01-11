@@ -74,7 +74,7 @@ export class ClientDiscord extends Client {
           .filter(this.getFilterFiles)
           .forEach(async (file) => {
             const commands: CommandType = (
-              await import(`@commands/${directory}/${file}`)
+              await import(`../commands/${directory}/${file}`)
             )?.default;
 
             const { name, buttons, selects, modals } = commands;
@@ -113,7 +113,7 @@ export class ClientDiscord extends Client {
         .filter(this.getFilterFiles)
         .forEach(async (file) => {
           const event: EventTypes<keyof ClientEvents> = (
-            await import(`@events/${directory}/${file}`)
+            await import(`../events/${directory}/${file}`)
           )?.default;
 
           const { name, once, execute } = event;
