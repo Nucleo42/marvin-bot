@@ -30,6 +30,13 @@ export default new Command({
       type: ApplicationCommandOptionType.Channel,
       required: false,
     },
+    {
+      name: "enable-or-disable",
+      description:
+        "The command to enable(true) or disable(false) the welcome channel",
+      type: ApplicationCommandOptionType.Boolean,
+      required: false,
+    },
   ],
   execute: async ({ interaction, options }) => {
     if (!interaction.isChatInputCommand()) return;
@@ -42,6 +49,7 @@ export default new Command({
       "submission-channel-id",
       false,
     );
+    const enableChannel = options.getBoolean("enable-or-disable", false);
 
     if (!channelID) {
       return await interaction.reply({
@@ -63,7 +71,7 @@ export default new Command({
       await database.setWelcomeChannel({
         guildID: interaction.guild?.id,
         channelID: channelID.id,
-        enabled: true,
+        enabled: enableChannel !== null ? enableChannel : true,
         rulesChannel: rulesChannelID?.id,
         presentationChannel: presentationChannelID?.id,
       });

@@ -13,7 +13,8 @@
   "scripts": {
     "dev": "node  --env-file=.env --watch  -r ts-node/register  -r tsconfig-paths/register src/index.ts",
     "start": "node --env-file=.env .",
-    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json && copyfiles -u 1 \"src/assets/**/*\" dist/"
+    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json && copyfiles -u 1 \"src/assets/**/*\" dist/",
+    "studio": "yarn drizzle-kit studio --port 5000 --verbose"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

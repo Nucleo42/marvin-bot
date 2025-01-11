@@ -29,6 +29,10 @@ export class WelcomeModel {
     await database.bd
       .insert(guildWelcomeChannel)
       .values(welcomeChannel)
+      .onConflictDoUpdate({
+        target: [guildWelcomeChannel.guild_id],
+        set: welcomeChannel,
+      })
       .execute();
   }
 
