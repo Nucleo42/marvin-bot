@@ -144,6 +144,12 @@ jobs:
             -H "Authorization: Bearer $API_KEY" \
             -F "file=@deploy.zip" \
             "$API_URL")
+          echo "Response Status Code: $RESPONSE"
+          FULL_RESPONSE=$(curl -s -X POST \
+            -H "Authorization: Bearer $API_KEY" \
+            -F "file=@deploy.zip" \
+            "$API_URL")
+          echo "Full Response: $FULL_RESPONSE"
           if [ "$RESPONSE" -ne 200 ]; then
             echo "Deploy failed with status $RESPONSE"
             exit 1
