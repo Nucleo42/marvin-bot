@@ -1,9 +1,11 @@
 import { ClientDiscord } from "@structures/ClientDiscord";
 import Logging from "@structures/Logging";
 import { Clientdrizzle } from "@structures/Clientdrizzle";
+import { LevelClient } from "@structures/ClientLevelDB";
 
 const client = new ClientDiscord();
 const database = new Clientdrizzle();
+const localDd = new LevelClient(".local");
 
 database
   .start()
@@ -32,5 +34,5 @@ process.on("unhandledRejection", (reason, promise) => {
   }
 });
 
-export { database };
+export { database, localDd };
 export default client;
