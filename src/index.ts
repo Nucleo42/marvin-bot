@@ -5,7 +5,7 @@ import { LevelClient } from "@structures/ClientLevelDB";
 
 const client = new ClientDiscord();
 const database = new Clientdrizzle();
-const localDd = new LevelClient(".local");
+const localDd = new LevelClient("./.local");
 
 database
   .start()

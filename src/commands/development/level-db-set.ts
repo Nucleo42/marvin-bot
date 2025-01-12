@@ -19,7 +19,7 @@ export default new Command({
     },
   ],
   execute: async ({ interaction, options }) => {
-    const me = options.getMentionable("me", true);
+    const me = options.getMember("me");
 
     if (!interaction.isChatInputCommand()) return;
 
