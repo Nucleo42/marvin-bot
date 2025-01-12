@@ -32,8 +32,15 @@ export default new Command({
     },
     {
       name: "enable-or-disable",
+      description: "Use true to enable the welcome or false to disable",
+      type: ApplicationCommandOptionType.Boolean,
+      required: false,
+    },
+
+    {
+      name: "leave-announcement",
       description:
-        "The command to enable(true) or disable(false) the welcome channel",
+        "Use true to enable the leave announcement or false to disable",
       type: ApplicationCommandOptionType.Boolean,
       required: false,
     },
@@ -50,6 +57,7 @@ export default new Command({
       false,
     );
     const enableChannel = options.getBoolean("enable-or-disable", false);
+    const leaveAnnouncement = options.getBoolean("leave-announcement", false);
 
     if (!channelID) {
       return await interaction.reply({
@@ -74,6 +82,8 @@ export default new Command({
         enabled: enableChannel !== null ? enableChannel : true,
         rulesChannel: rulesChannelID?.id,
         presentationChannel: presentationChannelID?.id,
+        leaveAnnouncement:
+          leaveAnnouncement !== null ? leaveAnnouncement : false,
       });
 
       await interaction.editReply({

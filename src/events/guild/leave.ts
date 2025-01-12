@@ -27,9 +27,11 @@ export default new Event({
 
       if (!welcomeChannelData[0]) return;
 
-      const { channel_id, enabled } = welcomeChannelData[0];
+      const { channel_id, enabled, leaveAnnouncement } = welcomeChannelData[0];
 
       if (!enabled) return;
+
+      if (!leaveAnnouncement) return;
 
       const canvas = new ProfileCardCanvas(600, 150);
 
