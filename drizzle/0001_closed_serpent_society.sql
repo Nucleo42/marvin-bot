@@ -1,0 +1,1 @@
+ALTER TABLE "guild_welcome_channel" ADD COLUMN "leaveAnnouncement" boolean DEFAULT false;
