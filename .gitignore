@@ -5,3 +5,4 @@ dist/
 .secrets
 .actrc
 .exclude
+.local
