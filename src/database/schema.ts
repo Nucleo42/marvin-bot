@@ -6,4 +6,5 @@ export const guildWelcomeChannel = pgTable("guild_welcome_channel", {
   enabled: boolean().notNull().default(true),
   rulesChannel: varchar(),
   presentationChannel: varchar(),
+  leaveAnnouncement: boolean().default(false),
 });

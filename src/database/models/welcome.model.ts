@@ -8,6 +8,7 @@ export interface WelcomeChannel {
   enabled: boolean;
   rulesChannel?: string;
   presentationChannel?: string;
+  leaveAnnouncement?: boolean;
 }
 
 export class WelcomeModel {
@@ -17,13 +18,15 @@ export class WelcomeModel {
     enabled,
     presentationChannel,
     rulesChannel,
+    leaveAnnouncement,
   }: WelcomeChannel) {
     const welcomeChannel: typeof guildWelcomeChannel.$inferInsert = {
       guild_id: guildID,
       channel_id: channelID,
       enabled: enabled,
-      presentationChannel: presentationChannel,
-      rulesChannel: rulesChannel,
+      presentationChannel,
+      rulesChannel,
+      leaveAnnouncement,
     };
 
     await database.bd
