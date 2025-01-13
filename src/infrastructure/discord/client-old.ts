@@ -6,18 +6,18 @@ import {
   GatewayIntentBits,
   Partials,
 } from "discord.js";
-import EnvironmentVariables from "@configs/EnvironmentVariables";
+import EnvironmentVariables from "src/infrastructure/configs/EnvironmentVariables";
 import {
   CommandType,
   ComponentsButton,
   ComponentsModal,
   ComponentsSelect,
-} from "@structures/types/commands";
-import Logging from "./Logging";
+} from "src/domain/interfaces/commands/commands";
+import Logging from "../../structures/Logging";
 import path from "path";
 import fs from "fs";
-import { EventTypes } from "@structures/types/events";
-import { isDev } from "@utilities/isDev";
+import { EventTypes } from "src/domain/interfaces/events/event";
+import { isDev } from "src/shared/utils/isDev";
 
 export class ClientDiscord extends Client {
   public commands: Collection<string, CommandType> = new Collection();
