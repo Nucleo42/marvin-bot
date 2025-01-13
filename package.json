@@ -46,7 +46,9 @@
     "drizzle-orm": "^0.38.3",
     "level": "^9.0.0",
     "pg": "^8.13.1",
+    "reflect-metadata": "^0.2.2",
     "signale": "^1.4.0",
+    "tsyringe": "^4.8.0",
     "zlib-sync": "^0.1.9"
   }
 }
