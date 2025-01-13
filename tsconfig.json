@@ -12,26 +12,53 @@
     "moduleResolution": "node", // Pretty much always node for modern JS. Other option is "classic"
     "module": "CommonJS",
     "paths": {
-      "@configs/*": [
-        "src/configs/*"
-      ],
       "@commands/*": [
-        "src/commands/*"
+        "src/application/commands/*"
       ],
       "@events/*": [
-        "src/events/*"
+        "src/application/events/*"
       ],
-      "@handlers/*": [
-        "src/handlers/*"
+      "@domain/*": [
+        "src/domain/*"
       ],
-      "@structures/*": [
-        "src/structures/*"
+      "@interfaces/*": [
+        "src/domain/interfaces/*"
       ],
-      "@utilities/*": [
-        "src/utilities/*"
+      "@entities/*": [
+        "src/domain/entities/*"
+      ],
+      "@infrastructure/*": [
+        "src/infrastructure/*"
+      ],
+      "@configs/*": [
+        "src/infrastructure/configs/*"
       ],
       "@database/*": [
-        "src/database/*"
+        "src/infrastructure/database/*"
+      ],
+      "@repositories/*": [
+        "src/infrastructure/database/repositories/*"
+      ],
+      "@discord/*": [
+        "src/infrastructure/discord/*"
+      ],
+      "@logging/*": [
+        "src/infrastructure/logging/*"
+      ],
+      "@storage/*": [
+        "src/infrastructure/storage/*"
+      ],
+      "@level/*": [
+        "src/infrastructure/storage/level/*"
+      ],
+      "@shared/*": [
+        "src/shared/*"
+      ],
+      "@constants/*": [
+        "src/shared/constants/*"
+      ],
+      "@utils/*": [
+        "src/shared/utils/*"
       ],
     }, // A series of entries which re-map imports to lookup locations relative to the baseUrl
     // Source Map
@@ -47,7 +74,9 @@
     "noImplicitReturns": true,
     "noUncheckedIndexedAccess": true, // accessing index must always check for undefined
     "noUnusedLocals": true, // Report errors on unused local variables.
-    "noUnusedParameters": true // Report errors on unused parameters in functions
+    "noUnusedParameters": true, // Report errors on unused parameters in functions
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "ts-node": {
     "esm": true, // «———— enabling ESM for ts-node   
