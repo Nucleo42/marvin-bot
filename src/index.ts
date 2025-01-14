@@ -1,36 +1,38 @@
-import { ClientDiscord } from "@structures/ClientDiscord";
-import Logging from "@structures/Logging";
-import { Clientdrizzle } from "@structures/Clientdrizzle";
+import "reflect-metadata";
+import "@container/index";
+import { container } from "tsyringe";
+import { ClientDiscord } from "@discord/client";
+import { Logger } from "@logging/logger";
+import { EventsLoader } from "@discord/loaders/EventsLoader";
+import { CommandLoader } from "@discord/loaders/CommandLoader";
+import { DatabaseConnection } from "@database/connection";
 
-const client = new ClientDiscord();
-const database = new Clientdrizzle();
+async function bootstrap() {
+  const client = container.resolve(ClientDiscord);
+  const logger = container.resolve(Logger);
 
-database
-  .start()
-  .then(() => {
-    Logging.success("Database connected!");
-  })
-  .catch((err) => Logging.error(err));
+  const database = container.resolve(DatabaseConnection);
+  await database.start();
 
-client
-  .start()
-  .then(() => {
-    Logging.success("Bot started!");
-  })
-  .catch((err) => Logging.error(err));
+  const eventsLoader = container.resolve(EventsLoader);
+  await eventsLoader.registerEvents();
 
-process.on("unhandledRejection", (reason, promise) => {
+  const commandLoader = container.resolve(CommandLoader);
+  await commandLoader.registerCommands();
+
   try {
-    console.error(
-      "Unhandled Rejection at: ",
-      promise,
-      "reason: ",
-      (reason instanceof Error ? reason.stack : reason) || reason,
-    );
-  } catch {
-    console.error(reason);
+    await client.start();
+    logger.info({
+      prefix: "discord-core",
+      message: "O client do discord foi iniciado!",
+    });
+  } catch (error) {
+    logger.error({
+      prefix: "discord-core",
+      message: "Ocorreu um erro ao iniciar o client do discord:",
+      error,
+    });
   }
-});
+}
 
-export { database };
-export default client;
+bootstrap();

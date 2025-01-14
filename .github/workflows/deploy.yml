@@ -128,7 +128,6 @@ jobs:
           .env \
           package.json \
           static \
-          drizzle \
           yarn.lock
 
       - name: Upload deployment package

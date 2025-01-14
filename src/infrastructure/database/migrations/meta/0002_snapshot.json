@@ -1,0 +1,70 @@
+{
+  "id": "09d2a4c6-d613-4acc-be76-4022cbe6fb5c",
+  "prevId": "693b4aec-4286-4b5d-b036-05b17a90165d",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.server_event_flow": {
+      "name": "server_event_flow",
+      "schema": "",
+      "columns": {
+        "guild_id": {
+          "name": "guild_id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "channel_id": {
+          "name": "channel_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "enabled": {
+          "name": "enabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "rulesChannel": {
+          "name": "rulesChannel",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "presentationChannel": {
+          "name": "presentationChannel",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "leaveAnnouncement": {
+          "name": "leaveAnnouncement",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
