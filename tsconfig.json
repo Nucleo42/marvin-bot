@@ -18,17 +18,8 @@
       "@events/*": [
         "src/application/events/*"
       ],
-      "@domain/*": [
-        "src/domain/*"
-      ],
       "@interfaces/*": [
         "src/domain/interfaces/*"
-      ],
-      "@entities/*": [
-        "src/domain/entities/*"
-      ],
-      "@infrastructure/*": [
-        "src/infrastructure/*"
       ],
       "@configs/*": [
         "src/infrastructure/configs/*"
@@ -51,9 +42,6 @@
       "@level/*": [
         "src/infrastructure/storage/level/*"
       ],
-      "@shared/*": [
-        "src/shared/*"
-      ],
       "@constants/*": [
         "src/shared/constants/*"
       ],
@@ -62,6 +50,18 @@
       ],
       "@utils/*": [
         "src/shared/utils/*"
+      ],
+      "@infrastructure/*": [
+        "src/infrastructure/*"
+      ],
+      "@entities/*": [
+        "src/domain/entities/*"
+      ],
+      "@domain/*": [
+        "src/domain/*"
+      ],
+      "@shared/*": [
+        "src/shared/*"
       ],
     }, // A series of entries which re-map imports to lookup locations relative to the baseUrl
     // Source Map
