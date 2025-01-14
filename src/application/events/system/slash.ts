@@ -1,11 +1,14 @@
-import { Event } from "@structures/types/events";
+import { Event } from "src/domain/interfaces/events/event";
 import { CommandInteractionOptionResolver } from "discord.js";
-import client from "../../index";
+import { ClientDiscord } from "@discord/client";
+import { container } from "tsyringe";
 
 export default new Event({
   name: "interactionCreate",
   execute: (interaction) => {
     if (!interaction.isChatInputCommand()) return;
+
+    const client = container.resolve(ClientDiscord);
 
     const command = client.commands.get(interaction.commandName);
 

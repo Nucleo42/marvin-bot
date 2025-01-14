@@ -1,9 +1,19 @@
-import client from "../../index";
-import { Event } from "@structures/types/events";
+import { container } from "tsyringe";
+import { Event } from "src/domain/interfaces/events/event";
+import { ClientDiscord } from "@discord/client";
 
 export default new Event({
   name: "interactionCreate",
   execute: (interaction) => {
+    if (
+      !interaction.isModalSubmit() &&
+      !interaction.isButton() &&
+      !interaction.isStringSelectMenu()
+    )
+      return;
+
+    const client = container.resolve(ClientDiscord);
+
     if (interaction.isModalSubmit()) {
       client.modals.get(interaction.customId)?.(interaction);
     }
