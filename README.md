@@ -110,7 +110,7 @@ Se você tiver algum feedback, por favor nos deixe saber por meio de `issues` ne
 ## Contribuidores ✨
 
 
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+Um agradecimento a todos!!([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -127,5 +127,4 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+Este projeto segue contribuições de [all-contributors](https://github.com/all-contributors/all-contributors). contribuições de qualquer tipo bem-vindas!
