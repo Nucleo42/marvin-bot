@@ -22,9 +22,16 @@ async function bootstrap() {
 
   try {
     await client.start();
-    logger.info("O client do discord foi iniciado!");
+    logger.info({
+      prefix: "discord-core",
+      message: "O client do discord foi iniciado!",
+    });
   } catch (error) {
-    logger.error("Ocorreu um erro ao iniciar o client do discord:", error);
+    logger.error({
+      prefix: "discord-core",
+      message: "Ocorreu um erro ao iniciar o client do discord:",
+      error,
+    });
   }
 }
 

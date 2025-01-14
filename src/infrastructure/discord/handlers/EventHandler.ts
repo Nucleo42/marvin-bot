@@ -25,11 +25,16 @@ export class EventHandler {
         });
       }
 
-      this.logger.info(
-        `O evento '${name}' foi registrado como: ${once ? "once" : "persistently"}`,
-      );
+      this.logger.info({
+        prefix: "discord-event",
+        message: `O evento '${name}' foi registrado como: ${once ? "once" : "persistently"}`,
+      });
     } catch (error) {
-      this.logger.error(`Erro ao registrar o evento:'${name}':`, error);
+      this.logger.error({
+        prefix: "discord-event",
+        message: `Erro ao registrar o evento:'${name}':`,
+        error: error,
+      });
     }
   }
 
@@ -41,7 +46,11 @@ export class EventHandler {
     try {
       await Promise.resolve(handler(...args));
     } catch (error) {
-      this.logger.error(`Erro ao inciar o handle do evento: '${name}':`, error);
+      this.logger.error({
+        prefix: "discord-event",
+        message: `Erro ao inciar o handle do evento: '${name}':`,
+        error: error,
+      });
     }
   }
 }

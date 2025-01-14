@@ -50,13 +50,23 @@ export class CommandLoader {
       for (const command of commands) {
         this.commandHandler.register(command);
 
-        this.logger.info(`registrado o comando: ${command.name}`);
+        this.logger.info({
+          prefix: "discord-command",
+          message: `registrado o comando: ${command.name}`,
+        });
       }
 
-      this.logger.info(`Total de ${commands.length} comandos carregados`);
+      this.logger.info({
+        prefix: "discord-command",
+        message: `Total de ${commands.length} comandos carregados`,
+      });
       await this.applyCommands();
     } catch (error) {
-      this.logger.error("Erro ao carregar comandos:", error);
+      this.logger.error({
+        prefix: "discord-command",
+        message: "Erro ao carregar comandos:",
+        error: error,
+      });
     }
   }
 
@@ -66,7 +76,10 @@ export class CommandLoader {
     this.clientDiscord.on("ready", async () => {
       await this.clientDiscord.application?.commands.set(listOfCommands);
 
-      this.logger.success("Comandos aplicados com sucesso!");
+      this.logger.success({
+        prefix: "discord-command",
+        message: "Comandos aplicados com sucesso!",
+      });
     });
   }
 }

@@ -6,6 +6,6 @@ export default new Event({
   name: "ready",
   execute: () => {
     const logger = container.resolve(Logger);
-    logger.success("O bot está pronto!");
+    logger.success({ prefix: "discord-core", message: "O bot está pronto!" });
   },
 });

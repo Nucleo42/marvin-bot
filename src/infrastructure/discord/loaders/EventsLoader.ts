@@ -58,11 +58,16 @@ export class EventsLoader {
         this.eventHandler.register(event.event);
       }
 
-      this.logger.success(
-        `Total de ${events.length} eventos registrados com sucesso.`,
-      );
+      this.logger.success({
+        prefix: "discord-event",
+        message: `Total de ${events.length} eventos registrados com sucesso.`,
+      });
     } catch (error) {
-      this.logger.error("Erro ao registrar eventos:", error);
+      this.logger.error({
+        prefix: "discord-event",
+        message: "Erro ao registrar eventos:",
+        error,
+      });
     }
   }
 }
