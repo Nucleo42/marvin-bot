@@ -5,10 +5,14 @@ import { ClientDiscord } from "@discord/client";
 import { Logger } from "@logging/logger";
 import { EventsLoader } from "@discord/loaders/EventsLoader";
 import { CommandLoader } from "@discord/loaders/CommandLoader";
+import { DatabaseConnection } from "@database/connection";
 
 async function bootstrap() {
   const client = container.resolve(ClientDiscord);
   const logger = container.resolve(Logger);
+
+  const database = container.resolve(DatabaseConnection);
+  await database.start();
 
   const eventsLoader = container.resolve(EventsLoader);
   await eventsLoader.registerEvents();
