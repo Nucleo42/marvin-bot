@@ -57,6 +57,9 @@
       "@constants/*": [
         "src/shared/constants/*"
       ],
+      "@container/*": [
+        "src/shared/container/*"
+      ],
       "@utils/*": [
         "src/shared/utils/*"
       ],
