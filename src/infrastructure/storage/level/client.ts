@@ -1,14 +1,20 @@
+import { Logger } from "@logging/logger";
 import { Level } from "level";
+import { inject, injectable } from "tsyringe";
 
 interface DataWrapper<T> {
   type: string;
   value: T;
 }
 
-export class LevelClient {
+@injectable()
+export class LevelDB {
   private db: Level<string, unknown>;
 
-  constructor(dbPath: string) {
+  constructor(
+    @inject("dbPath") dbPath: string,
+    @inject(Logger) private logger: Logger,
+  ) {
     this.db = new Level(dbPath, { valueEncoding: "json" });
   }
 
@@ -22,10 +28,12 @@ export class LevelClient {
       const fullKey = `${collection}:${key}`;
       await this.db.put(fullKey, wrappedData);
     } catch (err) {
-      console.error(
-        `Error saving data to collection: "${collection}", key: "${key}"\n`,
-        err,
-      );
+      this.logger.error({
+        prefix: "LevelDB",
+        message: `Error ao salvar  dados  na collection: "${collection}", key: "${key}"`,
+        error: err,
+      });
+
       throw err;
     }
   }
@@ -38,15 +46,19 @@ export class LevelClient {
       return data.value;
     } catch (err) {
       if (err.notFound) {
-        console.error(
-          `Data not found in collection: "${collection}", key: "${key}"`,
-        );
+        this.logger.error({
+          prefix: "LevelDB",
+          message: `Dados não encontrado na  collection: "${collection}", key: "${key}"`,
+        });
+
         return null;
       } else {
-        console.error(
-          `Error retrieving data from collection: "${collection}", key: "${key}"\n`,
-          err,
-        );
+        this.logger.error({
+          prefix: "LevelDB",
+          message: `Error ao recuperar dados na collection: "${collection}", key: "${key}"`,
+          error: err,
+        });
+
         throw err;
       }
     }
@@ -57,10 +69,12 @@ export class LevelClient {
       const fullKey = `${collection}:${key}`;
       await this.db.del(fullKey);
     } catch (err) {
-      console.error(
-        `Error deleting data from collection: "${collection}", key: "${key}"`,
-        err,
-      );
+      this.logger.error({
+        prefix: "LevelDB",
+        message: `Error ao deletar dados na collection: "${collection}", key: "${key}"`,
+        error: err,
+      });
+
       throw err;
     }
   }
@@ -75,7 +89,11 @@ export class LevelClient {
       }
       return keys;
     } catch (err) {
-      console.error(`Error listing keys in collection: "${collection}"\n`, err);
+      this.logger.error({
+        prefix: "LevelDB",
+        message: `Error ao listar chaves na collection: "${collection}"`,
+        error: err,
+      });
       throw err;
     }
   }
