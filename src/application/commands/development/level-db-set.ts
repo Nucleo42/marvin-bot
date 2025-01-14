@@ -1,10 +1,11 @@
-import { Command } from "@structures/types/commands";
+import { Command } from "@interfaces/commands/Command";
+import { LevelDB } from "@storage/level/client";
 import {
   ApplicationCommandOptionType,
   ApplicationCommandType,
   GuildMember,
 } from "discord.js";
-import { localDd } from "../../index";
+import { container } from "tsyringe";
 
 export default new Command({
   name: "level-db-set",
@@ -27,8 +28,8 @@ export default new Command({
       await interaction.reply("Invalid user");
       return;
     }
-
-    await localDd.setData<typeof me>("testing-level", `${me.id}`, me);
+    const localDd = container.resolve(LevelDB);
+    await localDd.setData<typeof me>("testing-level", "user", me);
     await interaction.reply("salved");
   },
 });
