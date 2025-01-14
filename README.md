@@ -107,10 +107,8 @@ Inicie a aplicação
 
 Se você tiver algum feedback, por favor nos deixe saber por meio de `issues` nesse repositório
 
-## Contribuidores
+## Contribuidores ✨
 
-
-## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
