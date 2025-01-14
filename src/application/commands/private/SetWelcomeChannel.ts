@@ -1,10 +1,12 @@
-import { Command } from "@structures/types/commands";
+import { Command } from "@interfaces/commands/Command";
 import {
   ApplicationCommandOptionType,
   ApplicationCommandType,
   MessageFlags,
 } from "discord.js";
-import { WelcomeModel } from "@database/models/welcome.model";
+import { ServerEventFlow } from "@database/repositories/ServerEventFlow.repository";
+import { container } from "tsyringe";
+import { Logger } from "@logging/logger";
 
 export default new Command({
   name: "set-welcome",
@@ -51,13 +53,6 @@ export default new Command({
     if (!interaction.memberPermissions?.has("Administrator")) return;
 
     const channelID = options.getChannel("welcome-channel-id", true);
-    const rulesChannelID = options.getChannel("rule-channel-id", false);
-    const presentationChannelID = options.getChannel(
-      "submission-channel-id",
-      false,
-    );
-    const enableChannel = options.getBoolean("enable-or-disable", false);
-    const leaveAnnouncement = options.getBoolean("leave-announcement", false);
 
     if (!channelID) {
       return await interaction.reply({
@@ -68,6 +63,16 @@ export default new Command({
 
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
+    const rulesChannelID = options.getChannel("rule-channel-id", false);
+    const presentationChannelID = options.getChannel(
+      "submission-channel-id",
+      false,
+    );
+    const enableChannel = options.getBoolean("enable-or-disable", false);
+    const leaveAnnouncement = options.getBoolean("leave-announcement", false);
+
+    const logger = container.resolve(Logger);
+
     try {
       if (!interaction.guild) {
         return await interaction.editReply({
@@ -75,7 +80,7 @@ export default new Command({
         });
       }
 
-      const database = new WelcomeModel();
+      const database = container.resolve(ServerEventFlow);
       await database.setWelcomeChannel({
         guildID: interaction.guild?.id,
         channelID: channelID.id,
@@ -91,7 +96,11 @@ export default new Command({
       });
       return;
     } catch (err) {
-      console.error(err);
+      logger.error({
+        prefix: "discord-command",
+        message: "Erro ao tentar setar o canal de boas-vindas",
+        error: err,
+      });
       await interaction.editReply({
         content: "An error occurred while setting the welcome channel",
       });
