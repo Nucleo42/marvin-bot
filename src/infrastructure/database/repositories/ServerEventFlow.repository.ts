@@ -1,6 +1,7 @@
-import { guildWelcomeChannel } from "../schema";
-import { database } from "../../index";
+import { server_event_flow as serverFlow } from "../schema";
+import { DatabaseConnection } from "@database/connection";
 import { eq } from "drizzle-orm";
+import { inject, injectable } from "tsyringe";
 
 export interface WelcomeChannel {
   guildID: string;
@@ -10,8 +11,12 @@ export interface WelcomeChannel {
   presentationChannel?: string;
   leaveAnnouncement?: boolean;
 }
-
+@injectable()
 export class WelcomeModel {
+  constructor(
+    @inject(DatabaseConnection) private database: DatabaseConnection,
+  ) {}
+
   async setWelcomeChannel({
     guildID,
     channelID,
@@ -20,7 +25,7 @@ export class WelcomeModel {
     rulesChannel,
     leaveAnnouncement,
   }: WelcomeChannel) {
-    const welcomeChannel: typeof guildWelcomeChannel.$inferInsert = {
+    const welcomeChannel: typeof serverFlow.$inferInsert = {
       guild_id: guildID,
       channel_id: channelID,
       enabled: enabled,
@@ -29,21 +34,23 @@ export class WelcomeModel {
       leaveAnnouncement,
     };
 
-    await database.bd
-      .insert(guildWelcomeChannel)
+    await this.database
+      .getBd()
+      .insert(serverFlow)
       .values(welcomeChannel)
       .onConflictDoUpdate({
-        target: [guildWelcomeChannel.guild_id],
+        target: [serverFlow.guild_id],
         set: welcomeChannel,
       })
       .execute();
   }
 
   async getWelcomeChannel(guildID: string) {
-    const welcomeChannel = await database.bd
+    const welcomeChannel = await this.database
+      .getBd()
       .select()
-      .from(guildWelcomeChannel)
-      .where(eq(guildWelcomeChannel.guild_id, guildID));
+      .from(serverFlow)
+      .where(eq(serverFlow.guild_id, guildID));
 
     return welcomeChannel;
   }
