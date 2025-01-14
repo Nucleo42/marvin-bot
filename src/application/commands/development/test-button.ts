@@ -1,4 +1,4 @@
-import { Command } from "@structures/types/commands";
+import { Command } from "@interfaces/commands/Command";
 import {
   ActionRowBuilder,
   ApplicationCommandType,

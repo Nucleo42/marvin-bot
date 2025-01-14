@@ -1,5 +1,5 @@
-import { ProfileCardCanvas } from "@utilities/canvas";
-import { Command } from "@structures/types/commands";
+import { ProfileCardCanvas } from "src/shared/utils/canvas";
+import { Command } from "@interfaces/commands/Command";
 import {
   ActionRowBuilder,
   ApplicationCommandOptionType,
