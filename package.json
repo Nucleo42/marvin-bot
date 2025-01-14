@@ -11,8 +11,8 @@
     "node": ">=20.18.0"
   },
   "scripts": {
-    "dev": "node  --env-file=.env --watch  -r ts-node/register  -r tsconfig-paths/register src/index.ts",
-    "start": "node --env-file=.env .",
+    "dev": "cross-env NODE_ENV=development node  --env-file=.env --watch  -r ts-node/register  -r tsconfig-paths/register src/index.ts",
+    "start": "cross-env NODE_ENV=production node --env-file=.env .",
     "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json && yarn migration && copyfiles -u 1 \"src/assets/**/*\" dist/",
     "studio": "yarn drizzle-kit studio --port 5000 --verbose",
     "generate-migrations": "npx drizzle-kit generate",
@@ -25,6 +25,7 @@
     "@types/pg": "^8.11.10",
     "@types/signale": "^1.4.7",
     "copyfiles": "^2.4.1",
+    "cross-env": "^7.0.3",
     "drizzle-kit": "^0.30.1",
     "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
