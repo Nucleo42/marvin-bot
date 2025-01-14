@@ -1,7 +1,21 @@
-import { Client, GatewayIntentBits, Partials } from "discord.js";
+import { Client, Collection, GatewayIntentBits, Partials } from "discord.js";
 import EnvironmentVariables from "@configs/EnvironmentVariables";
+import {
+  CommandType,
+  ComponentsButton,
+  ComponentsModal,
+  ComponentsSelect,
+} from "@interfaces/commands/Command";
 
+import { injectable } from "tsyringe";
+
+@injectable()
 export class ClientDiscord extends Client {
+  public commands: Collection<string, CommandType> = new Collection();
+  public buttons: ComponentsButton = new Collection();
+  public select: ComponentsSelect = new Collection();
+  public modals: ComponentsModal = new Collection();
+
   constructor() {
     super({
       intents: [
