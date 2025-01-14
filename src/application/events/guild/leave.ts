@@ -1,7 +1,9 @@
-import { Event } from "@structures/types/events";
+import { Event } from "src/domain/interfaces/events/event";
 import path from "path";
-import { ProfileCardCanvas } from "@utilities/canvas";
-import { WelcomeModel } from "@database/models/welcome.model";
+import { ProfileCardCanvas } from "@shared/utils/canvas";
+import { ServerEventFlow } from "@repositories/ServerEventFlow.repository";
+import { container } from "tsyringe";
+import { Logger } from "@logging/logger";
 
 const image = path.join(
   __dirname,
@@ -15,10 +17,12 @@ const image = path.join(
 export default new Event({
   name: "guildMemberRemove",
   execute: async (interaction) => {
+    const logger = container.resolve(Logger);
+
     const user = interaction.user;
 
     try {
-      const db = new WelcomeModel();
+      const db = container.resolve(ServerEventFlow);
       const welcomeChannelData = await db.getWelcomeChannel(
         interaction.guild.id,
       );
@@ -59,7 +63,11 @@ export default new Event({
         });
       }
     } catch (error) {
-      console.error(error);
+      logger.error({
+        prefix: "discord-event",
+        message: "Erro ao tentar enviar mensagem de saída: ",
+        error: error,
+      });
     }
   },
 });

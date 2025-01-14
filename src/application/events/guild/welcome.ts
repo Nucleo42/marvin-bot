@@ -1,9 +1,10 @@
-import { Event } from "@structures/types/events";
-/* import client from "src"; */
+import { Event } from "@interfaces/events/event";
 import path from "path";
-import { ProfileCardCanvas } from "@utilities/canvas";
+import { ProfileCardCanvas } from "@shared/utils/canvas";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
-import { WelcomeModel } from "@database/models/welcome.model";
+import { ServerEventFlow } from "@repositories/ServerEventFlow.repository";
+import { container } from "tsyringe";
+import { Logger } from "@logging/logger";
 
 const image = path.join(
   __dirname,
@@ -17,11 +18,14 @@ const image = path.join(
 export default new Event({
   name: "guildMemberAdd",
   execute: async (interaction) => {
+    const logger = container.resolve(Logger);
     const user = interaction.user;
+
     try {
       const canvas = new ProfileCardCanvas(600, 150);
 
-      const db = new WelcomeModel();
+      const db = container.resolve(ServerEventFlow);
+
       const welcomeChannelInfos = await db.getWelcomeChannel(
         interaction.guild.id,
       );
@@ -95,7 +99,10 @@ export default new Event({
         });
       }
     } catch (error) {
-      console.log(error);
+      logger.error({
+        prefix: "discord-event",
+        message: "Erro ao tentar enviar mensagem de boas-vindas: " + error,
+      });
     }
   },
 });
