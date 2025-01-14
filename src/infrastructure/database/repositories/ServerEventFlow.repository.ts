@@ -12,7 +12,7 @@ export interface WelcomeChannel {
   leaveAnnouncement?: boolean;
 }
 @injectable()
-export class WelcomeModel {
+export class ServerEventFlow {
   constructor(
     @inject(DatabaseConnection) private database: DatabaseConnection,
   ) {}
