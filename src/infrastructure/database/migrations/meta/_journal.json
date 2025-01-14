@@ -15,6 +15,13 @@
       "when": 1736641608294,
       "tag": "0001_closed_serpent_society",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1736822355740,
+      "tag": "0002_brown_kulan_gath",
+      "breakpoints": true
     }
   ]
 }
