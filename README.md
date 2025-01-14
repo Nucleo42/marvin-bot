@@ -1,4 +1,7 @@
 [![Deploy Code](https://github.com/Nucleo42/marvin-bot/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/Nucleo42/marvin-bot/actions/workflows/deploy.yml)
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # Marvin - bot oficial da comunidade Nucleo 42
 
@@ -104,5 +107,25 @@ Inicie a aplicação
 
 Se você tiver algum feedback, por favor nos deixe saber por meio de `issues` nesse repositório
 
-## Contribuidores
+## Contribuidores ✨
 
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/parlandin"><img src="https://avatars.githubusercontent.com/u/56051040?v=4?s=100" width="100px;" alt="Gustavo Parlandim"/><br /><sub><b>Gustavo Parlandim</b></sub></a><br /><a href="#maintenance-parlandin" title="Maintenance">🚧</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
