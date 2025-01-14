@@ -1,4 +1,4 @@
-import { Event } from "src/domain/interfaces/events/event";
+import { Event } from "@interfaces/events/event";
 import path from "path";
 import { ProfileCardCanvas } from "@shared/utils/canvas";
 import { ServerEventFlow } from "@repositories/ServerEventFlow.repository";

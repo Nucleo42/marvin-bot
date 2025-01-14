@@ -65,8 +65,7 @@ export class EventsLoader {
     } catch (error) {
       this.logger.error({
         prefix: "discord-event",
-        message: "Erro ao registrar eventos:",
-        error,
+        message: `Erro ao registrar eventos: ${error}`,
       });
     }
   }

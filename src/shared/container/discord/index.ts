@@ -5,6 +5,8 @@ import { EventHandler } from "@discord/handlers/EventHandler";
 import { EventsLoader } from "@discord/loaders/EventsLoader";
 import { CommandHandler } from "@discord/handlers/CommandHandler";
 import { CommandLoader } from "@discord/loaders/CommandLoader";
+import { isDev } from "@utils/isDev";
+import path from "path";
 
 container.registerSingleton(Logger, Logger);
 container.registerSingleton(ClientDiscord, ClientDiscord);
@@ -13,9 +15,10 @@ container.registerSingleton(EventsLoader, EventsLoader);
 container.registerSingleton(CommandLoader, CommandLoader);
 container.registerSingleton(CommandHandler, CommandHandler);
 
+const basePath = isDev ? "./src" : "./dist";
 container.register("EventsPath", {
-  useValue: "./src/application/events",
+  useValue: path.resolve(basePath, "application/events"),
 });
 container.register("CommandsPath", {
-  useValue: "./src/application/commands",
+  useValue: path.resolve(basePath, "application/commands"),
 });

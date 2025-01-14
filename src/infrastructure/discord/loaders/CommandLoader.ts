@@ -64,8 +64,7 @@ export class CommandLoader {
     } catch (error) {
       this.logger.error({
         prefix: "discord-command",
-        message: "Erro ao carregar comandos:",
-        error: error,
+        message: `Erro ao carregar comandos: ${error}`,
       });
     }
   }
