@@ -7,7 +7,7 @@ import {
 } from "canvas";
 import path from "path";
 
-const base = "../assets/fonts";
+const base = "../../assets/fonts";
 
 const righteous = path.join(__dirname, base, "Righteous-Regular.ttf");
 const poppinsBold = path.join(__dirname, base, "Poppins-Bold.ttf");

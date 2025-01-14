@@ -9,6 +9,7 @@ const image = path.join(
   __dirname,
   "..",
   "..",
+  "..",
   "assets",
   "images",
   "background.png",
