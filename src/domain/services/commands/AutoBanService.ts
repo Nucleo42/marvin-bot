@@ -14,6 +14,7 @@ import {
 import { injectable, inject } from "tsyringe";
 import { AutoBanRepository } from "@database/repositories/AutoBanRepository";
 import { isDev } from "@utils/IsDev";
+import { LevelDB } from "@storage/level/Client";
 
 type AllowedChannel =
   | CategoryChannel
@@ -33,6 +34,7 @@ export class AutoBanService {
   constructor(
     @inject(Logger) private logger: Logger,
     @inject(AutoBanRepository) private db: AutoBanRepository,
+    @inject(LevelDB) private storage: LevelDB,
   ) {}
 
   public async execute({ interaction, options }: CommandProps) {
@@ -87,6 +89,12 @@ export class AutoBanService {
       channel_to_listen: channelToListen.id,
       enabled: isEnabled,
       guild_id: guildId,
+      channel_to_logger: channelToLogger?.id,
+    });
+
+    await this.storage.setData("auto-ban", guildId, {
+      channel_to_listen: channelToListen.id,
+      enabled: isEnabled,
       channel_to_logger: channelToLogger?.id,
     });
   }
