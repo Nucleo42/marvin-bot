@@ -57,6 +57,9 @@
       "@entities/*": [
         "src/domain/entities/*"
       ],
+      "@services/*": [
+        "src/domain/services/*"
+      ],
       "@domain/*": [
         "src/domain/*"
       ],
