@@ -39,13 +39,13 @@ export class AutoBanRepository {
       .execute();
   }
 
-  async getWelcomeChannel(guildID: string) {
-    const welcomeChannel = await this.database
+  async getAutoBanConfig(guild_id: string) {
+    const autoBanConfig = await this.database
       .getBd()
       .select()
       .from(DB)
-      .where(eq(DB.guild_id, guildID));
+      .where(eq(DB.guild_id, guild_id));
 
-    return welcomeChannel;
+    return autoBanConfig;
   }
 }
