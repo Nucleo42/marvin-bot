@@ -19,19 +19,23 @@ export class CreateCanvasCardService {
     );
   }
 
-  async createWelcomeCard(user: GuildMember["user"]): Promise<Buffer> {
+  async createMemberCard(
+    user: GuildMember["user"],
+    statusText: string = "Acabou de entrar",
+    isGreen: boolean = true,
+  ): Promise<Buffer> {
     const canvas = new ProfileCardCanvas(600, 150);
 
     await canvas.drawCard({
       username: user.displayName,
       handle: user.username,
-      statusText: "Acabou de entrar",
+      statusText: statusText,
       avatarPath: user.displayAvatarURL({
         extension: "png",
         forceStatic: true,
       }),
       backgroundPath: this.backgroundImage,
-      isGreen: true,
+      isGreen: isGreen,
     });
 
     return canvas.getBuffer();

@@ -69,7 +69,7 @@ export class MemberWelcomeService {
 
       if (!welcomeConfig?.enabled) return;
 
-      const welcomeCard = await this.canvasService.createWelcomeCard(
+      const welcomeCard = await this.canvasService.createMemberCard(
         interaction.user,
       );
 
