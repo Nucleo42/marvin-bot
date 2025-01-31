@@ -1,4 +1,4 @@
-import { Command } from "@interfaces/commands/Command";
+import { Command } from "@interfaces/discord/Command";
 import { LevelDB } from "@storage/level/client";
 import {
   ApplicationCommandOptionType,

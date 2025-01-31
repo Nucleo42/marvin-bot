@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
-import { CommandType } from "@interfaces/commands/Command";
+import { CommandType } from "@interfaces/discord/Command";
 import { inject, injectable } from "tsyringe";
 import { CommandHandler } from "@discord/handlers/CommandHandler";
 import { Logger } from "@logging/logger";

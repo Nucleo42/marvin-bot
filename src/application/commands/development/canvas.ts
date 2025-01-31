@@ -1,5 +1,5 @@
 import { ProfileCardCanvas } from "src/shared/utils/canvas";
-import { Command } from "@interfaces/commands/Command";
+import { Command } from "@interfaces/discord/Command";
 import {
   ActionRowBuilder,
   ApplicationCommandOptionType,

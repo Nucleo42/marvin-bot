@@ -1,7 +1,7 @@
 import { ApplicationCommandDataResolvable } from "discord.js";
 import { ClientDiscord } from "@discord/client";
 import { injectable, inject } from "tsyringe";
-import { CommandType } from "@interfaces/commands/Command";
+import { CommandType } from "@interfaces/discord/Command";
 
 @injectable()
 export class CommandHandler {

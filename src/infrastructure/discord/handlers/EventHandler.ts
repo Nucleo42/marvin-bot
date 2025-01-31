@@ -2,7 +2,7 @@ import { Logger } from "@logging/logger";
 import { ClientEvents } from "discord.js";
 import { ClientDiscord } from "@discord/client";
 import { injectable, inject } from "tsyringe";
-import { EventTypes } from "@domain/interfaces/events/event";
+import { EventTypes } from "@interfaces/discord/event";
 
 @injectable()
 export class EventHandler {

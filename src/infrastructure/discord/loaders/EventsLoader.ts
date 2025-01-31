@@ -1,4 +1,4 @@
-import { Event } from "@interfaces/events/event";
+import { Event } from "@interfaces/discord/event";
 import path from "path";
 import fs from "fs/promises";
 import { Logger } from "@logging/logger";

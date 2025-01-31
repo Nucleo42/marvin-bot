@@ -1,4 +1,4 @@
-import { Event } from "@interfaces/events/event";
+import { Event } from "@interfaces/discord/event";
 import path from "path";
 import { ProfileCardCanvas } from "@shared/utils/canvas";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
