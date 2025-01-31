@@ -6,7 +6,7 @@ import {
 } from "discord.js";
 import { ServerEventFlow } from "@database/repositories/ServerEventFlow.repository";
 import { container } from "tsyringe";
-import { Logger } from "@logging/logger";
+import { Logger } from "@logging/Logger";
 
 export default new Command({
   name: "set-welcome",

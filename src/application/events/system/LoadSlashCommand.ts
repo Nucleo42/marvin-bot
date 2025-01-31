@@ -1,6 +1,6 @@
 import { Event } from "@interfaces/discord/Event";
 import { CommandInteractionOptionResolver } from "discord.js";
-import { ClientDiscord } from "@discord/client";
+import { ClientDiscord } from "@discord/Client";
 import { container } from "tsyringe";
 
 export default new Event({

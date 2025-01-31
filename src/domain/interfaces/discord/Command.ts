@@ -1,4 +1,4 @@
-import { ClientDiscord } from "@discord/client";
+import { ClientDiscord } from "@discord/Client";
 import {
   ApplicationCommandData,
   ButtonInteraction,

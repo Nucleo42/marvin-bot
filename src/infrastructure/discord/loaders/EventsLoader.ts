@@ -1,7 +1,7 @@
 import { Event } from "@interfaces/discord/Event";
 import path from "path";
 import fs from "fs/promises";
-import { Logger } from "@logging/logger";
+import { Logger } from "@logging/Logger";
 import { EventHandler } from "@discord/handlers/EventHandler";
 import { injectable, inject } from "tsyringe";
 import { ClientEvents } from "discord.js";

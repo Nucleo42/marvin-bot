@@ -1,4 +1,4 @@
-import { Logger } from "@logging/logger";
+import { Logger } from "@logging/Logger";
 import { Level } from "level";
 import { inject, injectable } from "tsyringe";
 

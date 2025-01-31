@@ -3,9 +3,9 @@ import path from "path";
 import { CommandType } from "@interfaces/discord/Command";
 import { inject, injectable } from "tsyringe";
 import { CommandHandler } from "@discord/handlers/CommandHandler";
-import { Logger } from "@logging/logger";
-import { ClientDiscord } from "@discord/client";
-import { isDev } from "@utils/isDev";
+import { Logger } from "@logging/Logger";
+import { ClientDiscord } from "@discord/Client";
+import { isDev } from "@utils/IsDev";
 
 @injectable()
 export class CommandLoader {

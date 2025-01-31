@@ -1,5 +1,5 @@
-import { server_event_flow as serverFlow } from "../schema";
-import { DatabaseConnection } from "@database/connection";
+import { server_event_flow as serverFlow } from "../Schema";
+import { DatabaseConnection } from "@database/Connection";
 import { eq } from "drizzle-orm";
 import { inject, injectable } from "tsyringe";
 

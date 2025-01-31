@@ -1,4 +1,4 @@
-import { Logger } from "@logging/logger";
+import { Logger } from "@logging/Logger";
 import { Event } from "@interfaces/discord/Event";
 import { container } from "tsyringe";
 

@@ -1,9 +1,9 @@
 import { Event } from "@interfaces/discord/Event";
 import path from "path";
-import { ProfileCardCanvas } from "@shared/utils/canvas";
+import { ProfileCardCanvas } from "@utils/Canvas";
 import { ServerEventFlow } from "@repositories/ServerEventFlow.repository";
 import { container } from "tsyringe";
-import { Logger } from "@logging/logger";
+import { Logger } from "@logging/Logger";
 
 const image = path.join(
   __dirname,

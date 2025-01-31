@@ -1,4 +1,4 @@
-import { ProfileCardCanvas } from "src/shared/utils/canvas";
+import { ProfileCardCanvas } from "@utils/Canvas";
 import { Command } from "@interfaces/discord/Command";
 import {
   ActionRowBuilder,

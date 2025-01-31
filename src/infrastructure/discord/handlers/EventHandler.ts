@@ -1,6 +1,6 @@
-import { Logger } from "@logging/logger";
+import { Logger } from "@logging/Logger";
 import { ClientEvents } from "discord.js";
-import { ClientDiscord } from "@discord/client";
+import { ClientDiscord } from "@discord/Client";
 import { injectable, inject } from "tsyringe";
 import { EventTypes } from "@interfaces/discord/Event";
 
