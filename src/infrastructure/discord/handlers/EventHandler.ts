@@ -3,6 +3,7 @@ import { ClientEvents } from "discord.js";
 import { ClientDiscord } from "@discord/Client";
 import { injectable, inject } from "tsyringe";
 import { EventTypes } from "@interfaces/discord/Event";
+import { isDev } from "@utils/IsDev";
 
 @injectable()
 export class EventHandler {
@@ -25,10 +26,12 @@ export class EventHandler {
         });
       }
 
-      this.logger.info({
-        prefix: "discord-event",
-        message: `O evento '${name}' foi registrado como: ${once ? "once" : "persistently"}`,
-      });
+      if (isDev) {
+        this.logger.info({
+          prefix: "discord-event",
+          message: `O evento '${name}' foi registrado como: ${once ? "once" : "persistently"}`,
+        });
+      }
     } catch (error) {
       this.logger.error({
         prefix: "discord-event",

@@ -22,5 +22,5 @@ container.register("CommandsPath", {
   useValue: path.resolve(BASE_PATH, "application/commands"),
 });
 
-//commands
 import "./commands";
+import "./events";

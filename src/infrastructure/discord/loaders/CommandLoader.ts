@@ -50,10 +50,12 @@ export class CommandLoader {
       for (const command of commands) {
         this.commandHandler.register(command);
 
-        this.logger.info({
-          prefix: "discord-command",
-          message: `registrado o comando: ${command.name}`,
-        });
+        if (isDev) {
+          this.logger.info({
+            prefix: "discord-command",
+            message: `registrado o comando: ${command.name}`,
+          });
+        }
       }
 
       this.logger.info({
