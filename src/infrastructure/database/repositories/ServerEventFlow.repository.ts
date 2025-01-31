@@ -4,8 +4,8 @@ import { eq } from "drizzle-orm";
 import { inject, injectable } from "tsyringe";
 
 export interface WelcomeChannel {
-  guildID: string;
-  channelID: string;
+  guild_id: string;
+  channel_id: string;
   enabled: boolean;
   rulesChannel?: string;
   presentationChannel?: string;
@@ -18,16 +18,16 @@ export class ServerEventFlow {
   ) {}
 
   async setWelcomeChannel({
-    guildID,
-    channelID,
+    guild_id,
+    channel_id,
     enabled,
     presentationChannel,
     rulesChannel,
     leaveAnnouncement,
   }: WelcomeChannel) {
     const welcomeChannel: typeof serverFlow.$inferInsert = {
-      guild_id: guildID,
-      channel_id: channelID,
+      guild_id: guild_id,
+      channel_id: channel_id,
       enabled: enabled,
       presentationChannel,
       rulesChannel,
