@@ -10,31 +10,30 @@ import { SetWelcomeChannelService } from "@services/commands/SetWelcomeChannelSe
 
 export default new Command({
   name: "set-welcome",
-  description: "A command to set the welcome channel",
+  description: "O comando para setar o canal de boas-vindas",
   type: ApplicationCommandType.ChatInput,
   options: [
     {
       name: "welcome-channel-id",
-      description: "The channel ID to set as the welcome channel",
+      description: "O canal para setar como canal de boas-vindas",
       type: ApplicationCommandOptionType.Channel,
       required: true,
     },
     {
       name: "rule-channel-id",
-      description: "The channel ID to set as the rules channel",
+      description: "O canal para setar como canal de regras",
       type: ApplicationCommandOptionType.Channel,
       required: false,
     },
     {
       name: "submission-channel-id",
-      description:
-        "The channel ID to set as the presentation/submission channel",
+      description: "O canal para setar como canal de apresentação de membros",
       type: ApplicationCommandOptionType.Channel,
       required: false,
     },
     {
       name: "enable-or-disable",
-      description: "Use true to enable the welcome or false to disable",
+      description: "Use true para habilitar ou false para desabilitar",
       type: ApplicationCommandOptionType.Boolean,
       required: false,
     },
@@ -42,7 +41,7 @@ export default new Command({
     {
       name: "leave-announcement",
       description:
-        "Use true to enable the leave announcement or false to disable",
+        "Use true para habilitar ou false para desabilitar a mensagem de saída",
       type: ApplicationCommandOptionType.Boolean,
       required: false,
     },

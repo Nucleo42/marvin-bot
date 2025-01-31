@@ -5,7 +5,7 @@ import { PingService } from "@services/commands/PingService";
 
 export default new Command({
   name: "ping",
-  description: "Ping command",
+  description: "Ping comando",
   type: ApplicationCommandType.ChatInput,
   execute: container.resolve(PingService).execute,
 });
