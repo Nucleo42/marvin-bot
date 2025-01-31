@@ -1,4 +1,4 @@
-import { Event } from "@interfaces/discord/event";
+import { Event } from "@interfaces/discord/Event";
 import path from "path";
 import { ProfileCardCanvas } from "@shared/utils/canvas";
 import { ServerEventFlow } from "@repositories/ServerEventFlow.repository";

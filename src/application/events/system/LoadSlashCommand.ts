@@ -1,4 +1,4 @@
-import { Event } from "@interfaces/discord/event";
+import { Event } from "@interfaces/discord/Event";
 import { CommandInteractionOptionResolver } from "discord.js";
 import { ClientDiscord } from "@discord/client";
 import { container } from "tsyringe";
