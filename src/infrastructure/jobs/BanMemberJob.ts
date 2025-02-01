@@ -6,11 +6,13 @@ import { IListOfMemberBan } from "@services/events/AddMemberOnBanListService";
 import { ClientDiscord } from "@discord/Client";
 import { isDev } from "@utils/IsDev";
 import { IAutoBanRepository } from "@database/repositories/AutoBanRepository";
+import { Guild, GuildMember, Collection } from "discord.js";
 
 @injectable()
 export class BanMemberJob {
   private task: ScheduledTask | null = null;
   private isRunning: boolean = false;
+  private readonly ONE_HOUR: number = 60 * 60 * 1000;
 
   constructor(
     @inject(Logger) private logger: Logger,
@@ -24,7 +26,7 @@ export class BanMemberJob {
     this.task = cron.schedule(
       "*/30 * * * *",
       async () => {
-        await this.BanMembers();
+        await this.processBanMembers();
       },
       {
         scheduled: false,
@@ -60,95 +62,149 @@ export class BanMemberJob {
     } else {
       this.logger.info({
         prefix: "ban-member-job",
-        message: " tarefa já está parada.",
+        message: "A tarefa já está parada.",
       });
     }
   }
 
-  private async BanMembers() {
+  private async processBanMembers(): Promise<void> {
     console.log(
       "Tarefa executada a cada 30 minutos:",
       new Date().toLocaleString(),
     );
 
-    const listOfGuilds = await this.storage.listKeys("members-to-ban");
+    const guildIds = await this.storage.listKeys("members-to-ban");
 
-    listOfGuilds.forEach(async (guildID) => {
-      const newListOfBan: IListOfMemberBan[] = [];
-      const listOfRevalidateBan: IListOfMemberBan[] = [];
+    for (const guildId of guildIds) {
+      await this.processBansForGuild(guildId);
+    }
+  }
 
-      const listOfUsers = await this.storage.getData<IListOfMemberBan[]>(
+  private async processBansForGuild(guildId: string): Promise<void> {
+    const users = await this.getMembersToBan(guildId);
+    if (!users || users.length === 0) return;
+
+    const { banList, revalidateList } = await this.separateBanLists(
+      guildId,
+      users,
+    );
+    await this.updateStoredBanList(guildId, revalidateList);
+
+    if (banList.length > 0) {
+      const guild = await this.client.guilds.fetch(guildId);
+      const membersToban = await this.getMembersForBulkBan(guild, banList);
+      await this.executeBulkBan(guild, membersToban);
+      await this.notifyBans(guild, membersToban);
+    }
+  }
+
+  private async getMembersToBan(guildId: string): Promise<IListOfMemberBan[]> {
+    return (
+      (await this.storage.getData<IListOfMemberBan[]>(
         "members-to-ban",
-        guildID,
-      );
+        guildId,
+      )) || []
+    );
+  }
 
-      if (listOfUsers && listOfUsers.length > 0) {
-        for (const member of listOfUsers) {
-          const guild = await this.client.guilds.fetch(guildID);
-          const guildMember = await guild.members.fetch(member.userId);
+  private async separateBanLists(
+    guildId: string,
+    users: IListOfMemberBan[],
+  ): Promise<{
+    banList: IListOfMemberBan[];
+    revalidateList: IListOfMemberBan[];
+  }> {
+    const banList: IListOfMemberBan[] = [];
+    const revalidateList: IListOfMemberBan[] = [];
 
-          if (
-            guildMember?.roles.cache.find((role) => role.name == "verificado")
-          ) {
-            continue;
-          }
+    for (const member of users) {
+      const guild = await this.client.guilds.fetch(guildId);
+      const guildMember = await guild.members.fetch(member.userId);
 
-          const ONE_HOUR = 60 * 60 * 1000;
-          const dataNow = Date.now();
-          const userDate = new Date(member.date).getTime();
-
-          const hasOneHourDifference = Math.abs(dataNow - userDate) >= ONE_HOUR;
-
-          if (hasOneHourDifference) {
-            newListOfBan.push(member);
-            continue;
-          }
-
-          listOfRevalidateBan.push(member);
-        }
+      if (await this.shouldSkipMember(guildMember)) {
+        continue;
       }
 
-      await this.storage.setData<IListOfMemberBan[]>(
-        "members-to-ban",
-        guildID,
-        listOfRevalidateBan,
-      );
-
-      if (newListOfBan.length > 0) {
-        const memberIdsToFetch = newListOfBan.map((ban) => ban.userId);
-
-        const guild = await this.client.guilds.fetch(guildID);
-
-        const listOFUsers = await guild.members.cache.filter((member) =>
-          memberIdsToFetch.includes(member.id),
-        );
-
-        guild.members.bulkBan(listOFUsers, {
-          reason: "Violação das regras do servidor (nao fez registro).",
-        });
-
-        if (isDev) {
-          this.logger.info({
-            prefix: "ban-member-job",
-            message: `Membros banidos do servidor ${guildID}`,
-          });
-        }
-
-        const notificationConfig =
-          await this.storage.getData<IAutoBanRepository>("auto-ban", guildID);
-
-        if (notificationConfig?.channel_to_logger) {
-          const channel = guild.channels.cache.get(
-            notificationConfig.channel_to_logger,
-          );
-
-          if (channel?.isSendable()) {
-            channel.send({
-              content: `Membros banidos por nao fazer a apresentação: ${listOFUsers.map((user) => `\n${user}`)}`,
-            });
-          }
-        }
+      const shouldBan = this.hasPassedTimeLimit(member.date);
+      if (shouldBan) {
+        banList.push(member);
+      } else {
+        revalidateList.push(member);
       }
+    }
+
+    return { banList, revalidateList };
+  }
+
+  private async shouldSkipMember(
+    member: GuildMember | undefined,
+  ): Promise<boolean> {
+    return !!member?.roles.cache.find((role) => role.name === "verificado");
+  }
+
+  private hasPassedTimeLimit(date: Date): boolean {
+    const dataNow = Date.now();
+    const userDate = new Date(date).getTime();
+    return Math.abs(dataNow - userDate) >= this.ONE_HOUR;
+  }
+
+  private async updateStoredBanList(
+    guildId: string,
+    revalidateList: IListOfMemberBan[],
+  ): Promise<void> {
+    await this.storage.setData<IListOfMemberBan[]>(
+      "members-to-ban",
+      guildId,
+      revalidateList,
+    );
+  }
+
+  private async getMembersForBulkBan(
+    guild: Guild,
+    banList: IListOfMemberBan[],
+  ): Promise<Collection<string, GuildMember>> {
+    const memberIdsToFetch = banList.map((ban) => ban.userId);
+    return guild.members.cache.filter((member) =>
+      memberIdsToFetch.includes(member.id),
+    );
+  }
+
+  private async executeBulkBan(
+    guild: Guild,
+    membersToban: Collection<string, GuildMember>,
+  ): Promise<void> {
+    await guild.members.bulkBan(membersToban, {
+      reason: "Violação das regras do servidor (não fez registro).",
     });
+
+    if (isDev) {
+      this.logger.info({
+        prefix: "ban-member-job",
+        message: `Membros banidos do servidor ${guild.id}`,
+      });
+    }
+  }
+
+  private async notifyBans(
+    guild: Guild,
+    bannedMembers: Collection<string, GuildMember>,
+  ): Promise<void> {
+    const notificationConfig = await this.storage.getData<IAutoBanRepository>(
+      "auto-ban",
+      guild.id,
+    );
+
+    if (!notificationConfig?.channel_to_logger) return;
+
+    const channel = guild.channels.cache.get(
+      notificationConfig.channel_to_logger,
+    );
+    if (channel?.isSendable()) {
+      await channel.send({
+        content: `Membros banidos por não fazer a apresentação: ${bannedMembers.map(
+          (user) => `\n${user}`,
+        )}`,
+      });
+    }
   }
 }
