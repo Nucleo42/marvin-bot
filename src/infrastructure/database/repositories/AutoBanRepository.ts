@@ -48,4 +48,14 @@ export class AutoBanRepository {
 
     return autoBanConfig;
   }
+
+  async getAllAutoBanConfig() {
+    const autoBanConfig = await this.database
+      .getBd()
+      .select()
+      .from(DB)
+      .execute();
+
+    return autoBanConfig;
+  }
 }

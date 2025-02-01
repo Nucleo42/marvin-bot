@@ -6,6 +6,7 @@ import { Logger } from "@logging/Logger";
 import { EventsLoader } from "@discord/loaders/EventsLoader";
 import { CommandLoader } from "@discord/loaders/CommandLoader";
 import { DatabaseConnection } from "@database/Connection";
+import { LoadCacheOnStartup } from "@services/LoadCacheOnStartup";
 
 async function bootstrap() {
   const client = container.resolve(ClientDiscord);
@@ -19,6 +20,9 @@ async function bootstrap() {
 
   const commandLoader = container.resolve(CommandLoader);
   await commandLoader.registerCommands();
+
+  const loadCacheOnStartup = container.resolve(LoadCacheOnStartup);
+  await loadCacheOnStartup.execute();
 
   try {
     await client.start();
