@@ -8,7 +8,7 @@ import { inject, injectable } from "tsyringe";
 import { LevelDB } from "@storage/level/Client";
 import { GuildMember } from "discord.js";
 
-interface IListOfMemberBan {
+export interface IListOfMemberBan {
   userId: string;
   date: Date;
 }

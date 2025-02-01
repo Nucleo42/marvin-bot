@@ -1,6 +1,6 @@
 import { Event } from "@interfaces/discord/Event";
 import { MemberWelcomeService } from "@services/events/MemberWelcomeService";
-import { AddMemberOnBanService } from "@services/events/AddMemberOnBanListServicee";
+import { AddMemberOnBanService } from "@services/events/AddMemberOnBanListService";
 import { container } from "tsyringe";
 
 export default new Event({
