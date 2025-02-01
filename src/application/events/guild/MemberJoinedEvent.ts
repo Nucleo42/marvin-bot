@@ -1,5 +1,6 @@
 import { Event } from "@interfaces/discord/Event";
 import { MemberWelcomeService } from "@services/events/MemberWelcomeService";
+import { AddMemberOnBanService } from "@services/events/AddMemberOnBanListServicee";
 import { container } from "tsyringe";
 
 export default new Event({
@@ -7,5 +8,8 @@ export default new Event({
   execute: async (interaction) => {
     const memberWelcomeService = container.resolve(MemberWelcomeService);
     memberWelcomeService.execute(interaction);
+
+    const memberBanService = container.resolve(AddMemberOnBanService);
+    memberBanService.execute(interaction);
   },
 });

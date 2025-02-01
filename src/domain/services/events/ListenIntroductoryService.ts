@@ -11,7 +11,6 @@ import {
 import { inject, injectable } from "tsyringe";
 import { LevelDB } from "@storage/level/Client";
 
-// Definindo a interface para o item de configuração
 interface AutoBanConfigItem {
   channel_to_listen: string;
   channel_to_logger?: string;
@@ -150,10 +149,11 @@ export class ListenIntroductoryService {
     const guild = interaction.guild;
     if (!guild) return;
 
-    const role = guild.roles.cache.find((r) => r.name === "verificado");
-    if (!role) return;
+    const roleVerified = guild.roles.cache.find((r) => r.name === "verificado");
+    const roleMember = guild.roles.cache.find((r) => r.name === "Membro");
+    if (!roleVerified || !roleMember) return;
 
-    await member.roles.add(role);
+    await member.roles.add([roleVerified, roleMember]);
 
     const botMessage = await interaction.reply({
       content: "Você foi registrado com sucesso!",
