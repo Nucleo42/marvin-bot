@@ -1,53 +1,11 @@
-import { Command } from "@interfaces/commands/Command";
-import {
-  ApplicationCommandOptionType,
-  ApplicationCommandType,
-  MessageFlags,
-} from "discord.js";
+import { CommandProps } from "@interfaces/discord/Command";
+import { MessageFlags } from "discord.js";
 import { ServerEventFlow } from "@database/repositories/ServerEventFlow.repository";
 import { container } from "tsyringe";
-import { Logger } from "@logging/logger";
+import { Logger } from "@logging/Logger";
 
-export default new Command({
-  name: "set-welcome",
-  description: "A command to set the welcome channel",
-  type: ApplicationCommandType.ChatInput,
-  options: [
-    {
-      name: "welcome-channel-id",
-      description: "The channel ID to set as the welcome channel",
-      type: ApplicationCommandOptionType.Channel,
-      required: true,
-    },
-    {
-      name: "rule-channel-id",
-      description: "The channel ID to set as the rules channel",
-      type: ApplicationCommandOptionType.Channel,
-      required: false,
-    },
-    {
-      name: "submission-channel-id",
-      description:
-        "The channel ID to set as the presentation/submission channel",
-      type: ApplicationCommandOptionType.Channel,
-      required: false,
-    },
-    {
-      name: "enable-or-disable",
-      description: "Use true to enable the welcome or false to disable",
-      type: ApplicationCommandOptionType.Boolean,
-      required: false,
-    },
-
-    {
-      name: "leave-announcement",
-      description:
-        "Use true to enable the leave announcement or false to disable",
-      type: ApplicationCommandOptionType.Boolean,
-      required: false,
-    },
-  ],
-  execute: async ({ interaction, options }) => {
+export class SetWelcomeChannelService {
+  public async execute({ interaction, options }: CommandProps) {
     if (!interaction.isChatInputCommand()) return;
 
     if (!interaction.memberPermissions?.has("Administrator")) return;
@@ -82,8 +40,8 @@ export default new Command({
 
       const database = container.resolve(ServerEventFlow);
       await database.setWelcomeChannel({
-        guildID: interaction.guild?.id,
-        channelID: channelID.id,
+        guild_id: interaction.guild?.id,
+        channel_id: channelID.id,
         enabled: enableChannel !== null ? enableChannel : true,
         rulesChannel: rulesChannelID?.id,
         presentationChannel: presentationChannelID?.id,
@@ -106,5 +64,5 @@ export default new Command({
       });
       return;
     }
-  },
-});
+  }
+}

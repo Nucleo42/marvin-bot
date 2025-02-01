@@ -5,7 +5,7 @@ import {
   ComponentsButton,
   ComponentsModal,
   ComponentsSelect,
-} from "@interfaces/commands/Command";
+} from "@interfaces/discord/Command";
 
 import { injectable } from "tsyringe";
 

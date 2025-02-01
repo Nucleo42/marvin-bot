@@ -1,0 +1,140 @@
+{
+  "id": "a590e079-a12b-4b99-ae1d-e7577fdcfb0f",
+  "prevId": "744dc52a-a0c5-449e-b4f4-156af5562bd3",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.auto_ban_config": {
+      "name": "auto_ban_config",
+      "schema": "",
+      "columns": {
+        "guild_id": {
+          "name": "guild_id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "enabled": {
+          "name": "enabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "channel_to_listen": {
+          "name": "channel_to_listen",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "channel_to_logger": {
+          "name": "channel_to_logger",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "ban_guild_id_idx:": {
+          "name": "ban_guild_id_idx:",
+          "columns": [
+            {
+              "expression": "guild_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.server_event_flow": {
+      "name": "server_event_flow",
+      "schema": "",
+      "columns": {
+        "guild_id": {
+          "name": "guild_id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "channel_id": {
+          "name": "channel_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "enabled": {
+          "name": "enabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "rulesChannel": {
+          "name": "rulesChannel",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "presentationChannel": {
+          "name": "presentationChannel",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "leaveAnnouncement": {
+          "name": "leaveAnnouncement",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        }
+      },
+      "indexes": {
+        "flow_guild_id_idx:": {
+          "name": "flow_guild_id_idx:",
+          "columns": [
+            {
+              "expression": "guild_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

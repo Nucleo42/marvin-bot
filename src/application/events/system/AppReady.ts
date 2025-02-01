@@ -1,5 +1,5 @@
-import { Logger } from "@logging/logger";
-import { Event } from "@interfaces/events/event";
+import { Logger } from "@logging/Logger";
+import { Event } from "@interfaces/discord/Event";
 import { container } from "tsyringe";
 
 export default new Event({

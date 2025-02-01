@@ -1,11 +1,13 @@
 import "reflect-metadata";
 import "@container/index";
 import { container } from "tsyringe";
-import { ClientDiscord } from "@discord/client";
-import { Logger } from "@logging/logger";
+import { ClientDiscord } from "@discord/Client";
+import { Logger } from "@logging/Logger";
 import { EventsLoader } from "@discord/loaders/EventsLoader";
 import { CommandLoader } from "@discord/loaders/CommandLoader";
-import { DatabaseConnection } from "@database/connection";
+import { DatabaseConnection } from "@database/Connection";
+import { LoadCacheOnStartup } from "@services/LoadCacheOnStartup";
+import { BanMemberJob } from "@infrastructure/jobs/BanMemberJob";
 
 async function bootstrap() {
   const client = container.resolve(ClientDiscord);
@@ -19,6 +21,12 @@ async function bootstrap() {
 
   const commandLoader = container.resolve(CommandLoader);
   await commandLoader.registerCommands();
+
+  const loadCacheOnStartup = container.resolve(LoadCacheOnStartup);
+  await loadCacheOnStartup.execute();
+
+  const banMemberJob = container.resolve(BanMemberJob);
+  banMemberJob.start();
 
   try {
     await client.start();

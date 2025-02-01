@@ -1,4 +1,4 @@
-import { ClientDiscord } from "@discord/client";
+import { ClientDiscord } from "@discord/Client";
 import {
   ApplicationCommandData,
   ButtonInteraction,
@@ -9,7 +9,7 @@ import {
   StringSelectMenuInteraction,
 } from "discord.js";
 
-interface CommandProps {
+export interface CommandProps {
   client: ClientDiscord;
   interaction: CommandInteraction;
   options: CommandInteractionOptionResolver;

@@ -1,11 +1,11 @@
 import { promises as fs } from "fs";
 import path from "path";
-import { CommandType } from "@interfaces/commands/Command";
+import { CommandType } from "@interfaces/discord/Command";
 import { inject, injectable } from "tsyringe";
 import { CommandHandler } from "@discord/handlers/CommandHandler";
-import { Logger } from "@logging/logger";
-import { ClientDiscord } from "@discord/client";
-import { isDev } from "@utils/isDev";
+import { Logger } from "@logging/Logger";
+import { ClientDiscord } from "@discord/Client";
+import { isDev } from "@utils/IsDev";
 
 @injectable()
 export class CommandLoader {
@@ -50,10 +50,12 @@ export class CommandLoader {
       for (const command of commands) {
         this.commandHandler.register(command);
 
-        this.logger.info({
-          prefix: "discord-command",
-          message: `registrado o comando: ${command.name}`,
-        });
+        if (isDev) {
+          this.logger.info({
+            prefix: "discord-command",
+            message: `registrado o comando: ${command.name}`,
+          });
+        }
       }
 
       this.logger.info({

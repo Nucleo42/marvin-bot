@@ -1,6 +1,6 @@
 import { container } from "tsyringe";
-import { Event } from "@interfaces/events/event";
-import { ClientDiscord } from "@discord/client";
+import { Event } from "@interfaces/discord/Event";
+import { ClientDiscord } from "@discord/Client";
 
 export default new Event({
   name: "interactionCreate",
