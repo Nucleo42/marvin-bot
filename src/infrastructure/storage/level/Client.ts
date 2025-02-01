@@ -43,7 +43,9 @@ export class LevelDB {
       const fullKey = `${collection}:${key}`;
       const data = (await this.db.get(fullKey)) as DataWrapper<T>;
 
-      return data.value;
+      if (!data?.value) return null;
+
+      return data?.value;
     } catch (err) {
       if (err.notFound) {
         this.logger.error({
