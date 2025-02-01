@@ -22,7 +22,7 @@ export class BanMemberJob {
 
   private scheduleTask(): void {
     this.task = cron.schedule(
-      "*/2 * * * *",
+      "*/30 * * * *",
       async () => {
         await this.BanMembers();
       },
@@ -93,7 +93,7 @@ export class BanMemberJob {
             continue;
           }
 
-          const ONE_HOUR = 60 * 2 * 1000;
+          const ONE_HOUR = 60 * 60 * 1000;
           const dataNow = Date.now();
           const userDate = new Date(member.date).getTime();
 
