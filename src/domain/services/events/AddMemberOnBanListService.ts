@@ -74,10 +74,12 @@ export class AddMemberOnBanService {
       },
     ]);
 
-    this.logger.info({
-      prefix: "auto-ban",
-      message: `Membro ${member.id} salvo na lista de ban existente`,
-    });
+    if (isDev) {
+      this.logger.info({
+        prefix: "auto-ban",
+        message: `Membro ${member.id} salvo na lista de ban existente`,
+      });
+    }
   }
 
   private async getAutoBanConfigForGuild(

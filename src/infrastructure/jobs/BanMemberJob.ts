@@ -5,6 +5,7 @@ import { inject, injectable } from "tsyringe";
 import { IListOfMemberBan } from "@services/events/AddMemberOnBanListService";
 import { ClientDiscord } from "@discord/Client";
 import { isDev } from "@utils/IsDev";
+import { IAutoBanRepository } from "@database/repositories/AutoBanRepository";
 
 @injectable()
 export class BanMemberJob {
@@ -21,7 +22,7 @@ export class BanMemberJob {
 
   private scheduleTask(): void {
     this.task = cron.schedule(
-      "*/30 * * * *",
+      "*/2 * * * *",
       async () => {
         await this.BanMembers();
       },
@@ -92,7 +93,7 @@ export class BanMemberJob {
             continue;
           }
 
-          const ONE_HOUR = 60 * 60 * 1000;
+          const ONE_HOUR = 60 * 2 * 1000;
           const dataNow = Date.now();
           const userDate = new Date(member.date).getTime();
 
@@ -131,6 +132,21 @@ export class BanMemberJob {
             prefix: "ban-member-job",
             message: `Membros banidos do servidor ${guildID}`,
           });
+        }
+
+        const notificationConfig =
+          await this.storage.getData<IAutoBanRepository>("auto-ban", guildID);
+
+        if (notificationConfig?.channel_to_logger) {
+          const channel = guild.channels.cache.get(
+            notificationConfig.channel_to_logger,
+          );
+
+          if (channel?.isSendable()) {
+            channel.send({
+              content: `Membros banidos por nao fazer a apresentação: ${listOFUsers.map((user) => `\n${user}`)}`,
+            });
+          }
         }
       }
     });

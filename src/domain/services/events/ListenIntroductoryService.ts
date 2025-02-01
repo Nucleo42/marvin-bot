@@ -29,31 +29,38 @@ export class ListenIntroductoryService {
   public async execute(
     interaction: OmitPartialGroupDMChannel<Message<boolean>>,
   ): Promise<void> {
-    if (this.shouldIgnoreInteraction(interaction)) return;
+    try {
+      if (this.shouldIgnoreInteraction(interaction)) return;
 
-    const guildId = interaction.guild?.id;
-    if (!guildId) return;
+      const guildId = interaction.guild?.id;
+      if (!guildId) return;
 
-    const configItem = await this.getAutoBanConfigForGuild(guildId);
-    if (!configItem) return;
+      const configItem = await this.getAutoBanConfigForGuild(guildId);
+      if (!configItem) return;
 
-    if (!this.shouldProcessInteraction(interaction, configItem)) return;
+      if (!this.shouldProcessInteraction(interaction, configItem)) return;
 
-    const member = interaction.guild.members.cache.get(interaction.author.id);
-    if (!member) return;
+      const member = interaction.guild.members.cache.get(interaction.author.id);
+      if (!member) return;
 
-    if (this.hasExemptRoles(member)) return;
+      if (this.hasExemptRoles(member)) return;
 
-    if (configItem.channel_to_logger) {
-      await this.logInteraction(interaction, configItem.channel_to_logger);
+      if (this.isShortMessage(interaction.content)) {
+        await this.handleShortMessage(interaction);
+        return;
+      }
+
+      await this.assignVerifiedRole(interaction, member);
+
+      if (configItem.channel_to_logger) {
+        await this.logInteraction(interaction, configItem.channel_to_logger);
+      }
+    } catch (error) {
+      this.logger.error({
+        prefix: "discord-core",
+        message: `Erro ao processar a mensagem de apresentação: ${error}`,
+      });
     }
-
-    if (this.isShortMessage(interaction.content)) {
-      await this.handleShortMessage(interaction);
-      return;
-    }
-
-    await this.assignVerifiedRole(interaction, member);
   }
 
   private shouldIgnoreInteraction(interaction: Message<boolean>): boolean {
@@ -113,7 +120,7 @@ export class ListenIntroductoryService {
     const channel = guild.channels.cache.get(loggerChannelId);
     if (this.isTextChannelSendable(channel)) {
       await (channel as TextChannel).send(
-        `Usuário ${interaction.author.tag} enviou uma mensagem de apresentação`,
+        `O usuário ${interaction.author} enviou uma mensagem de apresentação e foi validado com sucesso!`,
       );
     }
   }
@@ -158,6 +165,8 @@ export class ListenIntroductoryService {
     const botMessage = await interaction.reply({
       content: "Você foi registrado com sucesso!",
     });
+
+    await interaction.react("💜");
 
     setTimeout((): void => {
       botMessage.delete().catch(() => {});
