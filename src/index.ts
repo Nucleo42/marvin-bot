@@ -13,22 +13,22 @@ async function bootstrap() {
   const client = container.resolve(ClientDiscord);
   const logger = container.resolve(Logger);
 
-  const database = container.resolve(DatabaseConnection);
-  await database.start();
-
-  const eventsLoader = container.resolve(EventsLoader);
-  await eventsLoader.registerEvents();
-
-  const commandLoader = container.resolve(CommandLoader);
-  await commandLoader.registerCommands();
-
-  const loadCacheOnStartup = container.resolve(LoadCacheOnStartup);
-  await loadCacheOnStartup.execute();
-
-  const banMemberJob = container.resolve(BanMemberJob);
-  banMemberJob.start();
-
   try {
+    const database = container.resolve(DatabaseConnection);
+    await database.start();
+
+    const eventsLoader = container.resolve(EventsLoader);
+    await eventsLoader.registerEvents();
+
+    const commandLoader = container.resolve(CommandLoader);
+    await commandLoader.registerCommands();
+
+    const loadCacheOnStartup = container.resolve(LoadCacheOnStartup);
+    await loadCacheOnStartup.execute();
+
+    const banMemberJob = container.resolve(BanMemberJob);
+    banMemberJob.start();
+
     await client.start();
     logger.info({
       prefix: "discord-core",
@@ -41,6 +41,21 @@ async function bootstrap() {
       error,
     });
   }
+
+  process.on("uncaughtException", (error) => {
+    logger.error({
+      prefix: "global-error",
+      message: "Erro não tratado (uncaughtException): " + error,
+    });
+    process.exit(1);
+  });
+
+  process.on("unhandledRejection", (reason) => {
+    logger.error({
+      prefix: "global-error",
+      message: "Rejeição não tratada (unhandledRejection): " + reason,
+    });
+  });
 }
 
 bootstrap();

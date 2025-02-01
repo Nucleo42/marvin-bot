@@ -21,84 +21,105 @@ export class AddMemberOnBanService {
     @inject(LevelDB) private storage: LevelDB,
   ) {}
 
-  public async execute(interaction: GuildMember): Promise<void> {
-    const guildId = interaction.guild.id;
-    const configItem = await this.getAutoBanConfigForGuild(guildId);
+  public async execute(member: GuildMember): Promise<void> {
+    const guildId = member.guild.id;
+    const config = await this.getAutoBanConfigForGuild(guildId);
 
-    if (!configItem) return;
+    if (!this.isAutoBanEnabled(config)) {
+      return;
+    }
 
-    if (!configItem.enabled) return;
-
-    await this.setUserOnBanList(interaction, guildId);
+    await this.addMemberToBanList(member, guildId);
   }
 
-  private async setUserOnBanList(
+  private isAutoBanEnabled(config: IAutoBanRepository | null): boolean {
+    return config !== null && config.enabled === true;
+  }
+
+  private async addMemberToBanList(
     member: GuildMember,
     guildId: string,
   ): Promise<void> {
+    const currentBanList = await this.getCurrentBanList(guildId);
+    const updatedBanList = this.createUpdatedBanList(currentBanList, member);
+    await this.saveBanList(guildId, updatedBanList);
+
+    this.logBanListUpdate(member.id);
+  }
+
+  private async getCurrentBanList(
+    guildId: string,
+  ): Promise<IListOfMemberBan[]> {
     const currentList = await this.storage.getData<IListOfMemberBan[]>(
       "members-to-ban",
       guildId,
     );
+    return currentList || [];
+  }
 
-    const now = Date.now();
+  private createUpdatedBanList(
+    currentList: IListOfMemberBan[],
+    member: GuildMember,
+  ): IListOfMemberBan[] {
+    const newBanEntry: IListOfMemberBan = {
+      userId: member.id,
+      date: new Date(),
+    };
 
-    if (currentList && currentList.length > 0) {
-      const newList: IListOfMemberBan[] = [
-        ...currentList,
-        {
-          userId: member.id,
-          date: new Date(now),
-        },
-      ];
+    return [...currentList, newBanEntry];
+  }
 
-      await this.storage.setData<IListOfMemberBan[]>(
-        "members-to-ban",
-        guildId,
-        newList,
-      );
-
-      if (isDev) {
-        this.logger.info({
-          prefix: "auto-ban",
-          message: `Membro ${member.id} salvo na lista de ban existente`,
-        });
-      }
-      return;
-    }
-
-    await this.storage.setData<IListOfMemberBan[]>("members-to-ban", guildId, [
-      {
-        userId: member.id,
-        date: new Date(now),
-      },
-    ]);
-
-    this.logger.info({
-      prefix: "auto-ban",
-      message: `Membro ${member.id} salvo na lista de ban existente`,
-    });
+  private async saveBanList(
+    guildId: string,
+    banList: IListOfMemberBan[],
+  ): Promise<void> {
+    await this.storage.setData<IListOfMemberBan[]>(
+      "members-to-ban",
+      guildId,
+      banList,
+    );
   }
 
   private async getAutoBanConfigForGuild(
     guildId: string,
   ): Promise<IAutoBanRepository | null> {
-    const config = await this.storage.getData<IAutoBanRepository>(
-      "auto-ban",
-      guildId,
-    );
-
-    if (config) {
-      if (isDev) {
-        this.logger.info({
-          prefix: "auto-ban",
-          message: `Configuração de auto-ban para o servidor ${guildId} encontrada. localmente.`,
-        });
-      }
-      return config;
+    const localConfig = await this.getLocalAutoBanConfig(guildId);
+    if (localConfig) {
+      this.logLocalConfigFound(guildId);
+      return localConfig;
     }
 
-    const autoBanConfig = await this.db.getAutoBanConfig(guildId);
-    return autoBanConfig[0] as IAutoBanRepository;
+    const dbConfig = await this.getDbAutoBanConfig(guildId);
+    return dbConfig[0] as IAutoBanRepository;
+  }
+
+  private async getLocalAutoBanConfig(
+    guildId: string,
+  ): Promise<IAutoBanRepository | null> {
+    return await this.storage.getData<IAutoBanRepository>("auto-ban", guildId);
+  }
+
+  private async getDbAutoBanConfig(
+    guildId: string,
+  ): Promise<IAutoBanRepository[]> {
+    return (await this.db.getAutoBanConfig(guildId)) as IAutoBanRepository[];
+  }
+
+  private logLocalConfigFound(guildId: string): void {
+    if (isDev) {
+      this.logger.info({
+        prefix: "auto-ban",
+        message: `Configuração de auto-ban para o servidor ${guildId} encontrada localmente.`,
+      });
+    }
+  }
+
+  private logBanListUpdate(memberId: string): void {
+    if (isDev) {
+      this.logger.info({
+        prefix: "auto-ban",
+        message: `Membro ${memberId} salvo na lista de ban existente`,
+      });
+    }
   }
 }
