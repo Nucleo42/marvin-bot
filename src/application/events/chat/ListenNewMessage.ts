@@ -1,13 +1,13 @@
 import { Event } from "@interfaces/discord/Event";
 import { container } from "tsyringe";
-import { ListenIntroductoryService } from "@services/events/ListenIntroductoryService";
+import { IntroductionListenerService } from "@services/events/IntroductionListenerService";
 
 export default new Event({
   name: "messageCreate",
   execute: async (interaction) => {
-    const listenIntroductoryService = container.resolve(
-      ListenIntroductoryService,
+    const introductionListenerService = container.resolve(
+      IntroductionListenerService,
     );
-    listenIntroductoryService.execute(interaction);
+    introductionListenerService.execute(interaction);
   },
 });

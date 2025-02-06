@@ -19,7 +19,7 @@ interface AutoBanConfigItem {
 }
 
 @injectable()
-export class ListenIntroductoryService {
+export class IntroductionListenerService {
   constructor(
     @inject(Logger) private logger: Logger,
     @inject(AutoBanRepository) private db: AutoBanRepository,
