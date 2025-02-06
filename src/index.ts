@@ -7,7 +7,7 @@ import { EventsLoader } from "@discord/loaders/EventsLoader";
 import { CommandLoader } from "@discord/loaders/CommandLoader";
 import { DatabaseConnection } from "@database/Connection";
 import { LoadCacheOnStartup } from "@services/LoadCacheOnStartup";
-import { BanMemberJob } from "@infrastructure/jobs/BanMemberJob";
+import { JobsStart } from "@infrastructure/jobs";
 
 async function bootstrap() {
   const client = container.resolve(ClientDiscord);
@@ -26,8 +26,8 @@ async function bootstrap() {
     const loadCacheOnStartup = container.resolve(LoadCacheOnStartup);
     await loadCacheOnStartup.execute();
 
-    const banMemberJob = container.resolve(BanMemberJob);
-    banMemberJob.start();
+    const jobsStart = container.resolve(JobsStart);
+    jobsStart.start();
 
     await client.start();
     logger.info({
