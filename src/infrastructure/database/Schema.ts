@@ -27,3 +27,15 @@ export const auto_ban_config = pgTable(
     return [index("ban_guild_id_idx:").on(table.guild_id)];
   },
 );
+
+export const greeting_config = pgTable(
+  "greeting_config",
+  {
+    guild_id: varchar().primaryKey().notNull(),
+    enabled: boolean().notNull().default(true),
+    channel_to_send: varchar().notNull(),
+  },
+  (table) => {
+    return [index("greeting_guild_id_idx:").on(table.guild_id)];
+  },
+);
