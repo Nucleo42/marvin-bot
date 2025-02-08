@@ -28,12 +28,31 @@ export class AddMemberOnBanService {
     if (!this.isAutoBanEnabled(config)) {
       return;
     }
-
+    await this.addPendingTag(member);
     await this.addMemberToBanList(member, guildId);
   }
 
   private isAutoBanEnabled(config: IAutoBanRepository | null): boolean {
     return config !== null && config.enabled === true;
+  }
+
+  private async addPendingTag(member: GuildMember): Promise<void> {
+    if (isDev) {
+      this.logger.debug({
+        prefix: "auto-ban",
+        message: `Adicionando tag de pendente para o membro ${member.id}`,
+      });
+    }
+
+    const pendingTag = member.guild.roles.cache.find(
+      (r) => r.name === "Pendente",
+    );
+
+    if (!pendingTag) {
+      return;
+    }
+
+    await member.roles.add(pendingTag);
   }
 
   private async addMemberToBanList(
