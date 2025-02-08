@@ -7,12 +7,17 @@ import { ClientDiscord } from "@discord/Client";
 import { isDev } from "@utils/IsDev";
 import { IAutoBanRepository } from "@database/repositories/AutoBanRepository";
 import { Guild, GuildMember, Collection } from "discord.js";
+import configs from "@configs/EnvironmentVariables";
+import { formatTime } from "@utils/time";
+
+const { CRON_TIME, WAITING_TIME } = configs.BAN_JOB;
 
 @injectable()
 export class BanMemberJob {
   private task: ScheduledTask | null = null;
   private isRunning: boolean = false;
-  private readonly ONE_HOUR: number = 60 * 60 * 1000;
+  private readonly WAITING_TIME: number = parseInt(WAITING_TIME || "3600000");
+  private readonly CRON_TIME: string = CRON_TIME || "*/30 * * * *";
 
   constructor(
     @inject(Logger) private logger: Logger,
@@ -24,7 +29,7 @@ export class BanMemberJob {
 
   private scheduleTask(): void {
     this.task = cron.schedule(
-      "*/30 * * * *",
+      this.CRON_TIME,
       async () => {
         await this.processBanMembers();
       },
@@ -68,10 +73,15 @@ export class BanMemberJob {
   }
 
   private async processBanMembers(): Promise<void> {
-    console.log(
-      "Tarefa executada a cada 30 minutos:",
-      new Date().toLocaleString(),
-    );
+    this.logger.info({
+      prefix: "ban-member-job",
+      message: "Iniciando o processo para banimento de membros",
+    });
+
+    this.logger.debug({
+      prefix: "ban-member-job",
+      message: `O tempo de espera para banimento é de ${formatTime(this.WAITING_TIME)}`,
+    });
 
     const guildIds = await this.storage.listKeys("members-to-ban");
 
@@ -90,21 +100,34 @@ export class BanMemberJob {
     );
     await this.updateStoredBanList(guildId, revalidateList);
 
+    this.logger.debug({
+      prefix: "ban-member-job",
+      message: `Processando banimento de membros para o servidor ${guildId}, ${banList.length} membros a serem banidos`,
+    });
+
     if (banList.length > 0) {
       const guild = await this.client.guilds.fetch(guildId);
-      const membersToban = await this.getMembersForBulkBan(guild, banList);
-      await this.executeBulkBan(guild, membersToban);
-      await this.notifyBans(guild, membersToban);
+      const membersToBan = await this.getMembersForBulkBan(guild, banList);
+      await this.executeBulkBan(guild, membersToBan);
+      await this.notifyBans(guild, membersToBan);
     }
   }
 
   private async getMembersToBan(guildId: string): Promise<IListOfMemberBan[]> {
-    return (
+    const members =
       (await this.storage.getData<IListOfMemberBan[]>(
         "members-to-ban",
         guildId,
-      )) || []
-    );
+      )) || [];
+
+    if (members.length > 0) {
+      this.logger.debug({
+        prefix: "ban-member-job",
+        message: `${members.length} Membros a serem banidos do servidor ${guildId}`,
+      });
+    }
+
+    return members;
   }
 
   private async separateBanLists(
@@ -145,7 +168,7 @@ export class BanMemberJob {
   private hasPassedTimeLimit(date: Date): boolean {
     const dataNow = Date.now();
     const userDate = new Date(date).getTime();
-    return Math.abs(dataNow - userDate) >= this.ONE_HOUR;
+    return Math.abs(dataNow - userDate) >= this.WAITING_TIME;
   }
 
   private async updateStoredBanList(
@@ -164,6 +187,7 @@ export class BanMemberJob {
     banList: IListOfMemberBan[],
   ): Promise<Collection<string, GuildMember>> {
     const memberIdsToFetch = banList.map((ban) => ban.userId);
+
     return guild.members.cache.filter((member) =>
       memberIdsToFetch.includes(member.id),
     );
@@ -171,16 +195,16 @@ export class BanMemberJob {
 
   private async executeBulkBan(
     guild: Guild,
-    membersToban: Collection<string, GuildMember>,
+    membersToBan: Collection<string, GuildMember>,
   ): Promise<void> {
-    await guild.members.bulkBan(membersToban, {
+    await guild.members.bulkBan(membersToBan, {
       reason: "Violação das regras do servidor (não fez registro).",
     });
 
     if (isDev) {
-      this.logger.info({
+      this.logger.debug({
         prefix: "ban-member-job",
-        message: `Membros banidos do servidor ${guild.id}`,
+        message: `${membersToBan.size} Membros banidos do servidor ${guild.id}`,
       });
     }
   }
