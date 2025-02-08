@@ -146,7 +146,7 @@ export class IntroductionListenerService {
     setTimeout((): void => {
       interaction.delete().catch(() => {});
       botMessage.delete().catch(() => {});
-    }, 7000);
+    }, 9000);
   }
 
   private async assignVerifiedRole(
@@ -156,11 +156,25 @@ export class IntroductionListenerService {
     const guild = interaction.guild;
     if (!guild) return;
 
-    const roleVerified = guild.roles.cache.find((r) => r.name === "Verificado");
-    const roleMember = guild.roles.cache.find((r) => r.name === "Membro");
-    if (!roleVerified || !roleMember) return;
+    const roleVerified = guild.roles.cache.find((r) => r.name == "Verificado");
+    const roleMember = guild.roles.cache.find((r) => r.name == "Membro");
+    const rolePending = guild.roles.cache.find((r) => r.name == "Pendente");
 
-    await member.roles.add([roleVerified, roleMember]);
+    if (!roleVerified || !roleMember || !rolePending) {
+      if (isDev) {
+        this.logger.error({
+          prefix: "discord-core",
+          message:
+            "Não foi possível encontrar os cargos necessários para a validação do usuário!",
+        });
+      }
+      return;
+    }
+
+    await Promise.all([
+      member.roles.add([roleVerified, roleMember]),
+      member.roles.remove(rolePending),
+    ]);
 
     const botMessage = await interaction.reply({
       content: "Você foi registrado com sucesso!",
@@ -170,7 +184,7 @@ export class IntroductionListenerService {
 
     setTimeout((): void => {
       botMessage.delete().catch(() => {});
-    }, 7000);
+    }, 9000);
 
     if (isDev) {
       this.logger.info({
