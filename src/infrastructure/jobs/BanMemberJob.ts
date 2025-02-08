@@ -92,12 +92,23 @@ export class BanMemberJob {
 
   private async processBansForGuild(guildId: string): Promise<void> {
     const users = await this.getMembersToBan(guildId);
-    if (!users || users.length === 0) return;
+
+    if (!users || users.length === 0) {
+      if (isDev) {
+        this.logger.debug({
+          prefix: "ban-member-job",
+          message: `Não há membros para banir no servidor ${guildId}`,
+        });
+      }
+
+      return;
+    }
 
     const { banList, revalidateList } = await this.separateBanLists(
       guildId,
       users,
     );
+
     await this.updateStoredBanList(guildId, revalidateList);
 
     this.logger.debug({
@@ -142,7 +153,21 @@ export class BanMemberJob {
 
     for (const member of users) {
       const guild = await this.client.guilds.fetch(guildId);
-      const guildMember = await guild.members.fetch(member.userId);
+
+      const guildMember = await guild.members.fetch(member.userId).catch(() => {
+        return null;
+      });
+
+      if (guildMember == null) {
+        if (isDev) {
+          this.logger.debug({
+            prefix: "ban-member-job",
+            message: `Membro ${member.userId} não encontrado no servidor ${guildId}`,
+          });
+        }
+
+        continue;
+      }
 
       if (await this.shouldSkipMember(guildMember)) {
         continue;
@@ -155,6 +180,11 @@ export class BanMemberJob {
         revalidateList.push(member);
       }
     }
+
+    this.logger.debug({
+      prefix: "ban-member-job",
+      message: `Membros a serem banidos: ${banList.length}\nMembros a serem revalidados: ${revalidateList.length}`,
+    });
 
     return { banList, revalidateList };
   }
