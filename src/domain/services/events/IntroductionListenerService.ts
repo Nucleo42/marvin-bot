@@ -106,7 +106,7 @@ export class IntroductionListenerService {
 
   private hasExemptRoles(member: GuildMember): boolean {
     return member.roles.cache.some(
-      (role) => role.name === "Admin" || role.name === "verificado",
+      (role) => role.name === "Admin" || role.name === "Verificado",
     );
   }
 
@@ -156,7 +156,7 @@ export class IntroductionListenerService {
     const guild = interaction.guild;
     if (!guild) return;
 
-    const roleVerified = guild.roles.cache.find((r) => r.name === "verificado");
+    const roleVerified = guild.roles.cache.find((r) => r.name === "Verificado");
     const roleMember = guild.roles.cache.find((r) => r.name === "Membro");
     if (!roleVerified || !roleMember) return;
 

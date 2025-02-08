@@ -192,7 +192,7 @@ export class BanMemberJob {
   private async shouldSkipMember(
     member: GuildMember | undefined,
   ): Promise<boolean> {
-    return !!member?.roles.cache.find((role) => role.name === "verificado");
+    return !!member?.roles.cache.find((role) => role.name === "Verificado");
   }
 
   private hasPassedTimeLimit(date: Date): boolean {
