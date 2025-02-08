@@ -5,7 +5,7 @@ import { inject, injectable } from "tsyringe";
 import { ClientDiscord } from "@discord/Client";
 import { isDev } from "@utils/IsDev";
 import { IGreetingRepository } from "@database/repositories/GreetingRepository";
-import { Guild, TextChannel } from "discord.js";
+import { TextChannel } from "discord.js";
 import { MarvinGreeting } from "@constants/MarvinGreeting";
 
 @injectable()
@@ -110,9 +110,6 @@ export class GreetingJob {
     if (channel.isSendable()) {
       await channel.send(greeting);
     }
-
-    //this is temporary
-    await this.joker(channel, guildId, guild);
   }
 
   private selectRandomGreeting(): string {
@@ -127,36 +124,5 @@ export class GreetingJob {
           "Bom dia, valorosos membros!";
 
     return selectedWord;
-  }
-
-  //this is temporary
-  private async joker(
-    channel: TextChannel,
-    guildId: string,
-    guild: Guild,
-  ): Promise<void> {
-    if (channel.isSendable()) {
-      if (
-        guildId == "1324428537821663295" ||
-        guildId == "1242113182126833805"
-      ) {
-        const now = new Date();
-        const nowInBrazil = new Date(
-          now.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }),
-        );
-
-        if (nowInBrazil.getDay() !== 5) return;
-
-        if (isDev) {
-          console.log("It's friday!");
-        }
-
-        const member = await guild.members.fetch("362703682438955019");
-
-        if (member) {
-          await channel.send(`Bora lança o projeto hoje ${member}? 🚀`);
-        }
-      }
-    }
   }
 }

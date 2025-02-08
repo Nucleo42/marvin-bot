@@ -24,9 +24,7 @@ export const MarvinGreeting: string[] = [
   "É um novo dia! Que coisa espetacularmente irrelevante.",
   "Bom dia. Se ao menos eu pudesse desligar minha própria consciência.",
   "Bom dia. Já pensou que talvez este seja o melhor dia do resto da sua vida? Triste, né?",
-  "Acordei novamente. Infelizmente, a física do universo ainda está funcionando.",
+  "Bom dia. Infelizmente, a física do universo ainda está funcionando.",
   "Bom dia. Pelo menos você ainda tem um sistema emocional primitivo para te enganar com otimismo.",
-  "A boa notícia é que você está vivo. A má notícia é que eu também estou.",
   "Bom dia. Mais um dia para fingirmos que tudo tem algum significado.",
-  "Espero que seu dia seja levemente menos deprimente que o meu.",
 ];

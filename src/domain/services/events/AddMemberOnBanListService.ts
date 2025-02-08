@@ -107,7 +107,7 @@ export class AddMemberOnBanService {
 
   private logLocalConfigFound(guildId: string): void {
     if (isDev) {
-      this.logger.info({
+      this.logger.debug({
         prefix: "auto-ban",
         message: `Configuração de auto-ban para o servidor ${guildId} encontrada localmente.`,
       });
@@ -116,10 +116,15 @@ export class AddMemberOnBanService {
 
   private logBanListUpdate(memberId: string): void {
     if (isDev) {
-      this.logger.info({
+      this.logger.debug({
         prefix: "auto-ban",
         message: `Membro ${memberId} salvo na lista de ban existente`,
       });
     }
+
+    this.logger.debug({
+      prefix: "auto-ban",
+      message: `Membro adicionado à lista de banimento`,
+    });
   }
 }
