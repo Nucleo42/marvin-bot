@@ -32,15 +32,6 @@ export class MemberCountService {
     }
 
     const is_enabled = options.getBoolean("is-enabled", true);
-
-    if (!is_enabled) {
-      await interaction.reply({
-        content: "O contador de membro está desativado!",
-        flags: MessageFlags.Ephemeral,
-      });
-      return;
-    }
-
     const guild = interaction.guild;
 
     if (!guild) {
@@ -48,6 +39,16 @@ export class MemberCountService {
         content: "Este comando só pode ser executado em um servidor!",
         flags: MessageFlags.Ephemeral,
       });
+      return;
+    }
+
+    if (!is_enabled) {
+      await interaction.reply({
+        content: "O contador de membro está desativado!",
+        flags: MessageFlags.Ephemeral,
+      });
+
+      await this.salveConfigurations(guild.id, is_enabled);
       return;
     }
 
@@ -68,7 +69,7 @@ export class MemberCountService {
       content: "O contador de membro foi ativado/atualizado!",
     });
 
-    this.salveConfigurations(guild.id, is_enabled);
+    await this.salveConfigurations(guild.id, is_enabled);
   }
 
   private getChannel(guild: Guild) {

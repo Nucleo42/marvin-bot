@@ -69,12 +69,12 @@ export class MemberCountJob {
       }
 
       const memberCount = formatNumber(guild.memberCount);
-      const is_enabled = this.storage.getData<{ is_enabled: boolean }[]>(
+      const data = await this.storage.getData<{ is_enabled: boolean }>(
         "member-count",
         guildId,
       );
 
-      if (!is_enabled) {
+      if (!data?.is_enabled) {
         continue;
       }
 
