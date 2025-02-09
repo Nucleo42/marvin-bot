@@ -29,7 +29,7 @@ export class AdminPermissionService {
 
     const hasAdminRoles = this.checkAdminRolesExist(guild);
     if (!hasAdminRoles) {
-      return true;
+      return false;
     }
 
     return this.checkUserHasAdminRole(guild, data.user.id);
