@@ -124,7 +124,7 @@ export class MemberCountService {
   }
 
   private async salveConfigurations(guildId: string, is_enabled: boolean) {
-    await this.storage.setData("member-count", guildId, is_enabled);
+    await this.storage.setData("member-count", guildId, { is_enabled });
 
     if (isDev) {
       this.logger.debug({
