@@ -133,6 +133,16 @@ export class MemberCountJob {
 
     const newName = channelName.replace(channelNameRegex, `$1 ${memberCount}`);
 
+    if (newName === channelName) {
+      if (isDev) {
+        this.logger.debug({
+          prefix: "discord-core-member-count",
+          message: "O canal de membros não precisa ser atualizado!",
+        });
+      }
+      return;
+    }
+
     await channel.setName(newName);
 
     if (isDev) {
