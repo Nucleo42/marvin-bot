@@ -3,27 +3,30 @@ import { Logger } from "@logging/Logger";
 import { LevelDB } from "@storage/level/Client";
 import { isDev } from "@utils/IsDev";
 import {
-  CacheType,
   ChannelType,
-  CommandInteraction,
   Guild,
   GuildBasedChannel,
   MessageFlags,
 } from "discord.js";
 import { inject, injectable } from "tsyringe";
 import { formatNumber } from "@utils/formatNumber";
+import { AdminPermissionService } from "@services/AdminPermissionService";
 
 @injectable()
 export class MemberCountService {
   constructor(
     @inject(Logger) private logger: Logger,
     @inject(LevelDB) private storage: LevelDB,
+    @inject(AdminPermissionService)
+    private adminPermission: AdminPermissionService,
   ) {}
 
   public async execute({ interaction, options }: CommandProps): Promise<void> {
     if (!interaction.isChatInputCommand()) return;
 
-    if (!this.hasPermission(interaction)) {
+    const hasPermission = await this.adminPermission.hasPermission(interaction);
+
+    if (!hasPermission) {
       await interaction.reply({
         content: "Você não tem permissão para executar este comando!",
         flags: MessageFlags.Ephemeral,
@@ -80,10 +83,6 @@ export class MemberCountService {
     );
 
     return channel;
-  }
-
-  private hasPermission(interaction: CommandInteraction<CacheType>) {
-    return interaction.memberPermissions?.has("Administrator");
   }
 
   private async CreateChannel(guild: Guild, memberCount: string) {
