@@ -1,6 +1,8 @@
 import { marvinPhrases } from "@constants/MarvinPhrases";
 import { CommandProps } from "@interfaces/discord/Command";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class PingService {
   public async execute({ interaction }: CommandProps) {
     const chance = Math.random();
