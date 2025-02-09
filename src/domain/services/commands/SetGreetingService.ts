@@ -1,8 +1,6 @@
 import { CommandProps } from "@interfaces/discord/Command";
 import { Logger } from "@logging/Logger";
 import {
-  CacheType,
-  CommandInteraction,
   CategoryChannel,
   NewsChannel,
   StageChannel,
@@ -15,6 +13,7 @@ import { injectable, inject } from "tsyringe";
 import { GreetingRepository } from "@database/repositories/GreetingRepository";
 import { isDev } from "@utils/IsDev";
 import { LevelDB } from "@storage/level/Client";
+import { AdminPermissionService } from "@services/AdminPermissionService";
 
 type AllowedChannel =
   | CategoryChannel
@@ -34,12 +33,14 @@ export class SetGreetingService {
     @inject(Logger) private logger: Logger,
     @inject(GreetingRepository) private db: GreetingRepository,
     @inject(LevelDB) private storage: LevelDB,
+    @inject(AdminPermissionService)
+    private adminPermission: AdminPermissionService,
   ) {}
 
   public async execute({ interaction, options }: CommandProps) {
     if (!interaction.isChatInputCommand()) return;
 
-    const isAdministrator = this.hasPermission(interaction);
+    const isAdministrator = this.adminPermission.hasPermission(interaction);
 
     if (!isAdministrator) {
       return await interaction.reply({
@@ -72,10 +73,6 @@ export class SetGreetingService {
     return await interaction.editReply({
       content: "As configurações foram salvas com sucesso!",
     });
-  }
-
-  private hasPermission(interaction: CommandInteraction<CacheType>) {
-    return interaction.memberPermissions?.has("Administrator");
   }
 
   private async salveConfigurations() {
