@@ -7,5 +7,7 @@ export default new Command({
   name: "ping",
   description: "Ping comando",
   type: ApplicationCommandType.ChatInput,
-  execute: container.resolve(PingService).execute,
+  execute: container
+    .resolve(PingService)
+    .execute.bind(container.resolve(PingService)),
 });

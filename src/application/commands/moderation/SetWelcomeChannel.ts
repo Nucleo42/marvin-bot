@@ -46,5 +46,7 @@ export default new Command({
       required: false,
     },
   ],
-  execute: container.resolve(SetWelcomeChannelService).execute,
+  execute: container
+    .resolve(SetWelcomeChannelService)
+    .execute.bind(container.resolve(SetWelcomeChannelService)),
 });

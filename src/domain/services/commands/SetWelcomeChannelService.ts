@@ -1,21 +1,36 @@
 import { CommandProps } from "@interfaces/discord/Command";
 import { MessageFlags } from "discord.js";
 import { ServerEventFlow } from "@database/repositories/ServerEventFlow.repository";
-import { container } from "tsyringe";
+import { container, inject, injectable } from "tsyringe";
 import { Logger } from "@logging/Logger";
+import { AdminPermissionService } from "@services/AdminPermissionService";
 
+@injectable()
 export class SetWelcomeChannelService {
+  constructor(
+    @inject(AdminPermissionService)
+    private adminPermission: AdminPermissionService,
+    @inject(Logger) private logger: Logger,
+  ) {}
   public async execute({ interaction, options }: CommandProps) {
     if (!interaction.isChatInputCommand()) return;
 
-    if (!interaction.memberPermissions?.has("Administrator")) return;
+    const hasPermission = await this.adminPermission.hasPermission(interaction);
+
+    if (!hasPermission) {
+      await interaction.reply({
+        content: "Voce não tem permissão para executar este comando",
+        flags: MessageFlags.Ephemeral,
+      });
+      return;
+    }
 
     const channelID = options.getChannel("welcome-channel-id", true);
 
     if (!channelID) {
       return await interaction.reply({
         flags: MessageFlags.Ephemeral,
-        content: "Invalid channel ID",
+        content: "O canal de boas-vindas é obrigatório",
       });
     }
 
@@ -29,12 +44,10 @@ export class SetWelcomeChannelService {
     const enableChannel = options.getBoolean("enable-or-disable", false);
     const leaveAnnouncement = options.getBoolean("leave-announcement", false);
 
-    const logger = container.resolve(Logger);
-
     try {
       if (!interaction.guild) {
         return await interaction.editReply({
-          content: "An error occurred while setting the welcome channel",
+          content: "Um erro ocorreu ao tentar setar o canal de boas-vindas",
         });
       }
 
@@ -50,17 +63,17 @@ export class SetWelcomeChannelService {
       });
 
       await interaction.editReply({
-        content: "Welcome channel set!",
+        content: "O canal de boas-vindas foi setado com sucesso",
       });
       return;
     } catch (err) {
-      logger.error({
+      this.logger.error({
         prefix: "discord-command",
         message: "Erro ao tentar setar o canal de boas-vindas",
         error: err,
       });
       await interaction.editReply({
-        content: "An error occurred while setting the welcome channel",
+        content: "Um erro ocorreu ao tentar setar o canal de boas-vindas",
       });
       return;
     }
