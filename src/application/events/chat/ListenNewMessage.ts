@@ -1,6 +1,7 @@
 import { Event } from "@interfaces/discord/Event";
 import { container } from "tsyringe";
 import { IntroductionListenerService } from "@services/events/IntroductionListenerService";
+import { AnnouncementReactService } from "@services/events/AnnouncementReactService";
 
 export default new Event({
   name: "messageCreate",
@@ -9,5 +10,10 @@ export default new Event({
       IntroductionListenerService,
     );
     introductionListenerService.execute(interaction);
+
+    const announcementReactService = container.resolve(
+      AnnouncementReactService,
+    );
+    announcementReactService.execute(interaction);
   },
 });
