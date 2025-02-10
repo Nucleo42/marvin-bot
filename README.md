@@ -7,6 +7,15 @@
 
 - [Marvin - bot oficial da comunidade Nucleo 42](#marvin---bot-oficial-da-comunidade-nucleo-42)
   - [Referência](#referência)
+  - [Funções e Comandos](#funções-e-comandos)
+    - [Observações](#observações)
+    - [`/ping` comando](#ping-comando)
+    - [`/set-greeting` comando/função](#set-greeting-comandofunção)
+    - [`/set-welcome` comando/função](#set-welcome-comandofunção)
+    - [`/set-member-count` comando/função](#set-member-count-comandofunção)
+    - [`/set-announcement-react` comando/função](#set-announcement-react-comandofunção)
+    - [`/set-auto-ban` comando/função](#set-auto-ban-comandofunção)
+  - [Template de servidor](#template-de-servidor)
   - [Como  contribuir](#como--contribuir)
     - [Importante](#importante)
     - [Passo a passo para contribuir:](#passo-a-passo-para-contribuir)
@@ -16,7 +25,7 @@
     - [Testando localmente](#testando-localmente)
   - [Suporte](#suporte)
   - [Feedback](#feedback)
-  - [Contribuidores](#contribuidores)
+  - [Contribuidores ✨](#contribuidores-)
 
 ## Referência
 
@@ -26,6 +35,59 @@
  - [node-canvas-  Canvas implementation for Node.js](https://github.com/Automattic/node-canvas)
 
 
+## Funções e Comandos
+
+### Observações  
+- A maioria dos comandos contem a opção `is_enabled` que pode ser `true`ou `false` e serve para ativar ou desativar uma funcionalidade.
+- Os comandos aqui lista do como `admin` só podem ser usado por cargos que tenha permissão de administrado ou com os  respectivos  cargos:      
+  - **admin**
+  - **administrator**
+  - **administrador**
+
+### `/ping` comando
+- usado para testar o servidor, mas com um pequeno **easter egg** do *guia do mochileiro das galaxias*.
+
+### `/set-greeting` comando/função  
+- Quando ativado, envia uma mensagem de "bom dia" todos os dias no horário determinado no `cron-job`.
+- pode haver um pequeno **easter egg**.
+- **Admin**: sim.
+
+### `/set-welcome` comando/função 
+- Esse comando ativa a função de mensagem personalizada de entrada de novos membros.
+- tem **campos** opcionais para definir algumas configurações, como por exemplo, qual o canal de regras, para assim, criar um link para o canal.
+- **Admin**: sim.
+- veja o exemplo: 
+  
+  <img src="./static/images/welcome.jpg" alt="imagem de exemplo de entrada de membro">
+
+### `/set-member-count` comando/função
+- Esse comando ativa a função de contagem de membro no servidor.
+- Quanto ativo, busca por um canal chamado `Membros:` e caso nao exista, ele cria um.
+- é possível editar o canal posteriormente conforme necessário, inclusive adicionado um emoji, mas o nome tem que conter `Membros:`.
+- **Admin**: sim.
+- Exemplo: 
+- 
+  <img src="./static/images/member.jpg" alt="exemplo de contagem de membro">
+
+### `/set-announcement-react` comando/função
+- Quando ativado, reage a todas as mensagem enviada no `canal especificado por você`, usando o emoji escolhido.
+- Você deve copiar o emoji e não o dele, por exemplo: `:purple_heart:` não funciona, mas `💜` funciona perfeitamente.
+- Se for um emoji customizado, deve informar o `id` do emoji e não o nome.
+- **Admin**: sim.
+  
+
+### `/set-auto-ban` comando/função
+- Principal comando do bot, feito para evitar `spam` no servidor.
+- Quando essa função está ativa e um `novo membro` entrar no servidor, ele é automaticamente adicionado a uma `lista de ban`.
+- Para o `membro` continuar no servidor, ele deve enviar uma mensagem no canal de `Apresentação` ou qualquer `canal definido por você`.  
+- O tempo padrão de banimento é  de `1 hora`, mas pode ser ajustado no arquivo `.env`.
+- **Tags** necessária no servidor: `Pendente` e `Verificado`.
+- **Admin**: sim.
+
+
+## Template de servidor
+- Use este template para criar seu próprio servidor e testar todas as funções do `marvin` já com canais e tags criadas.
+- template discord: https://discord.new/KPZR4j5jWK8z
 
 ## Como  contribuir
 ### Importante
@@ -56,7 +118,7 @@
 
 ### Iniciando o projeto
 
-Clone o projeto
+Clone o `projeto
 
 ```bash
   git clone https://github.com/Nucleo42/marvin-bot.git

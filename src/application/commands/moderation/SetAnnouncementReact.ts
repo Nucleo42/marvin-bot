@@ -8,12 +8,12 @@ import { SetAnnouncementReactService } from "@services/commands/SetAnnouncementR
 
 export default new Command({
   name: "set-announcement-react",
-  description: "Comando para enviar uma saudação para um canal",
+  description: "Comando para definir a reação no anúncio",
   type: ApplicationCommandType.ChatInput,
   options: [
     {
       name: "is-enabled",
-      description: "O envio de saudação está habilitado?",
+      description: "Se a reação está habilitada",
       type: ApplicationCommandOptionType.Boolean,
       required: true,
     },
