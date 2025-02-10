@@ -25,7 +25,7 @@
     - [Testando localmente](#testando-localmente)
   - [Suporte](#suporte)
   - [Feedback](#feedback)
-  - [Contribuidores](#contribuidores)
+  - [Contribuidores ✨](#contribuidores-)
 
 ## Referência
 
