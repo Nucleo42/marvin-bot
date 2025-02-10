@@ -176,15 +176,20 @@ export class IntroductionListenerService {
       member.roles.remove(rolePending),
     ]);
 
+    const channel = guild.channels.cache.find(
+      (name) => name.name === "📌-como-participar",
+    );
+
     const botMessage = await interaction.reply({
-      content: "Você foi registrado com sucesso!",
+      content: `Obrigado por se apresentar! Sua validação foi concluída com sucesso! 💜
+      \nPara começar, dê uma passada no canal ${channel ? channel : "**onboarding**"} e saiba tudo sobre os **projetos**!`,
     });
 
     await interaction.react("💜");
 
     setTimeout((): void => {
       botMessage.delete().catch(() => {});
-    }, 9000);
+    }, 20000);
 
     if (isDev) {
       this.logger.info({
