@@ -234,14 +234,14 @@ export class AnnouncementProjectService {
     const processedSlots = await this.processProjectSlots(content, message);
     if (!processedSlots) return;
 
-    await this.createAndSendAnnouncement(
+    const announcement = await this.createAndSendAnnouncement(
       thread,
       message,
       announcementChannel,
       processedSlots,
     );
 
-    //await this.processMessageReaction(announcement);
+    await this.processMessageReaction(announcement);
 
     if (isDev) {
       this.logger.debug({
