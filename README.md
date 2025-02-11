@@ -39,7 +39,7 @@
 
 ### Observações  
 - A maioria dos comandos contem a opção `is_enabled` que pode ser `true`ou `false` e serve para ativar ou desativar uma funcionalidade.
-- Os comandos aqui lista do como `admin` só podem ser usado por cargos que tenha permissão de administrado ou com os  respectivos  cargos:      
+- Os comandos aqui listado como `admin` só podem ser usado por cargos que tenha permissão de administrado ou com os  respectivos  cargos:      
   - **admin**
   - **administrator**
   - **administrador**
@@ -71,7 +71,7 @@
 
 ### `/set-announcement-react` comando/função
 - Quando ativado, reage a todas as mensagem enviada no `canal especificado por você`, usando o emoji escolhido.
-- Você deve copiar o emoji e não o dele, por exemplo: `:purple_heart:` não funciona, mas `💜` funciona perfeitamente.
+- Você deve copiar o emoji e não o nome dele, por exemplo: `:purple_heart:` não funciona, mas `💜` funciona perfeitamente.
 - Se for um emoji customizado, deve informar o `id` do emoji e não o nome.
 - **Admin**: sim.
   
