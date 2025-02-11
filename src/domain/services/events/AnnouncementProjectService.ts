@@ -72,7 +72,6 @@ export class AnnouncementProjectService {
   private createEmbed(
     threadName: string,
     embedSlots: string,
-    mentionsMessage: string,
     isAffirmative: boolean | string,
     affirmativeType: string | null,
   ): EmbedBuilder {
@@ -97,11 +96,11 @@ export class AnnouncementProjectService {
       });
     }
 
-    fields.push({
+    /* fields.push({
       name: "📢 Notificação",
       value: mentionsMessage || "Nenhum",
       inline: false,
-    });
+    }); */
 
     return new EmbedBuilder()
       .setTitle("🚀 Novo Projeto Criado!")
@@ -186,14 +185,16 @@ export class AnnouncementProjectService {
     const embed = this.createEmbed(
       thread.name,
       processedSlots.embedSlots,
-      processedSlots.mentionsMessage,
       processedSlots.isAffirmative,
       processedSlots.affirmativeType,
     );
 
+    // processedSlots.mentionsMessage,
+
     const components = this.createButton(message.url);
 
     const sendAnnouncement = await announcementChannel.send({
+      content: `||${processedSlots.mentionsMessage}||`,
       components: [components],
       embeds: [embed],
     });
