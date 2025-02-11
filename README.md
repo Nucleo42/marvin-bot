@@ -15,6 +15,7 @@
     - [`/set-member-count` comando/função](#set-member-count-comandofunção)
     - [`/set-announcement-react` comando/função](#set-announcement-react-comandofunção)
     - [`/set-auto-ban` comando/função](#set-auto-ban-comandofunção)
+    - [`/set-project-announcement` comando/função](#set-project-announcement-comandofunção)
   - [Template de servidor](#template-de-servidor)
   - [Como  contribuir](#como--contribuir)
     - [Importante](#importante)
@@ -39,7 +40,7 @@
 
 ### Observações  
 - A maioria dos comandos contem a opção `is_enabled` que pode ser `true`ou `false` e serve para ativar ou desativar uma funcionalidade.
-- Os comandos aqui lista do como `admin` só podem ser usado por cargos que tenha permissão de administrado ou com os  respectivos  cargos:      
+- Os comandos aqui listado como `admin` só podem ser usado por cargos que tenha permissão de administrado ou com os  respectivos  cargos:      
   - **admin**
   - **administrator**
   - **administrador**
@@ -71,7 +72,7 @@
 
 ### `/set-announcement-react` comando/função
 - Quando ativado, reage a todas as mensagem enviada no `canal especificado por você`, usando o emoji escolhido.
-- Você deve copiar o emoji e não o dele, por exemplo: `:purple_heart:` não funciona, mas `💜` funciona perfeitamente.
+- Você deve copiar o emoji e não o nome dele, por exemplo: `:purple_heart:` não funciona, mas `💜` funciona perfeitamente.
 - Se for um emoji customizado, deve informar o `id` do emoji e não o nome.
 - **Admin**: sim.
   
@@ -83,6 +84,21 @@
 - O tempo padrão de banimento é  de `1 hora`, mas pode ser ajustado no arquivo `.env`.
 - **Tags** necessária no servidor: `Pendente` e `Verificado`.
 - **Admin**: sim.
+  
+
+### `/set-project-announcement` comando/função
+- Esse comando habilita a função de anuncio de projeto, isso é, pega uma postagem do forum de projetos, extrair vagas e cargos e então anunciar no canal especificado.
+- Essa função existe para remover a limitação dos forum do discord, que permite marcar somente tags que tenha 100 ou menos membros.
+- **Tags** necessária no servidor:
+  - `@Vagas Back-end`
+  - `@Vagas Design`
+  - `@Vagas Front-end`
+  - `@Vagas Dados`
+  - `@Vagas Mobile`
+- **Admin**: sim.
+- Exemplo: 
+  
+<img src="./static/images/projetos.jpg" alt="project imagem"/>
 
 
 ## Template de servidor

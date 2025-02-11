@@ -39,3 +39,16 @@ export const greeting_config = pgTable(
     return [index("greeting_guild_id_idx:").on(table.guild_id)];
   },
 );
+
+export const announcement_project_config = pgTable(
+  "announcement_project_config",
+  {
+    guild_id: varchar().primaryKey().notNull(),
+    enabled: boolean().notNull().default(true),
+    forum_thread_to_listen: varchar().notNull(),
+    channel_to_send: varchar(),
+  },
+  (table) => {
+    return [index("announcement_project_guild_id_idx:").on(table.guild_id)];
+  },
+);

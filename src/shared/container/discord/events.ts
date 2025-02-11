@@ -6,6 +6,7 @@ import { IntroductionListenerService } from "@services/events/IntroductionListen
 import { AddMemberOnBanService } from "@services/events/AddMemberOnBanListService";
 import { BotStatusService } from "@services/events/BotStatusService";
 import { AnnouncementReactService } from "@services/events/AnnouncementReactService";
+import { AnnouncementProjectService } from "@services/events/AnnouncementProjectService";
 
 container.registerSingleton(MemberWelcomeService, MemberWelcomeService);
 container.registerSingleton(CreateCanvasCardService, CreateCanvasCardService);
@@ -14,3 +15,4 @@ container.register(IntroductionListenerService, IntroductionListenerService);
 container.register(AddMemberOnBanService, AddMemberOnBanService);
 container.register(BotStatusService, BotStatusService);
 container.register(AnnouncementReactService, AnnouncementReactService);
+container.register(AnnouncementProjectService, AnnouncementProjectService);

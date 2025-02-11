@@ -16,7 +16,7 @@ export class BotStatusService {
     }
 
     client.user?.setActivity({
-      name: "Novos projetos",
+      name: "Novos projetos!!",
       type: ActivityType.Watching,
     });
   }

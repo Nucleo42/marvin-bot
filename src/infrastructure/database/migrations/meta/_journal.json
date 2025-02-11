@@ -43,6 +43,13 @@
       "when": 1738873741885,
       "tag": "0005_careful_chat",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1739285789814,
+      "tag": "0006_neat_gunslinger",
+      "breakpoints": true
     }
   ]
 }

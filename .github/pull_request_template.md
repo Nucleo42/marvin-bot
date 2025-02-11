@@ -1,43 +1,43 @@
-## Descrição
+# Description
 
-Descreva brevemente as alterações feitas neste PR.
+Briefly describe the changes introduced in this PR.
 
-## Tipo de Alteração
+## Type of Change
 
-Selecione o tipo de mudança:
+Select the type of change:
 
 - [ ] 🐛 Bug fix
-- [ ] 🚀 Nova funcionalidade
-- [ ] 🔧 Melhorias e refatoração
-- [ ] 📝 Atualização de documentação
+- [ ] 🚀 New feature
+- [ ] 🔧 Improvements and refactoring
+- [ ] 📝 Documentation update
 
-## Issues Relacionadas
+## Related Issues
 
-Conecte este PR a issues existentes:
+Link this PR to existing issues:
 
-- Resolve: #[número da issue]
-- Relacionado: #[número da issue]
+- Closes: #ISSUE_NUMBER
+- Related: #ISSUE_NUMBER
 
-## Como testar?
+## How to Test?
 
-Explique como os revisores podem testar essa PR.
+Explain how reviewers can test this PR.
 
-## Vincular ao GitHub Projects
+## Link to GitHub Projects
 
-- [ ] Este PR está vinculado a um card no GitHub Projects
-      Se marcado, indique o link ou o nome do card:
+- [ ] This PR is linked to a card in GitHub Projects  
+      If checked, provide the card name or link:
 
-> Nome do card: `...`
+> Card name: `...`
 
 ## Checklist
 
-Antes de enviar o PR, verifique se você:
+Before submitting the PR, ensure you:
 
-- [ ] Testou o código localmente
-- [ ] Adicionou ou atualizou testes, se aplicável
-- [ ] Atualizou a documentação, se necessário
-- [ ] Seguiu as boas práticas do projeto
+- [ ] Tested the changes locally
+- [ ] Added/updated tests (if applicable)
+- [ ] Updated documentation (if necessary)
+- [ ] Followed project best practices
 
-## Informações Adicionais
+## Additional Information
 
-Inclua qualquer detalhe extra ou contexto relevante.
+Include any extra context or screenshots if relevant.
