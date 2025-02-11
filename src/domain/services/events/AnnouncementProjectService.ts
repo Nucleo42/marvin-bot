@@ -158,7 +158,7 @@ export class AnnouncementProjectService {
     projectSlots.slots.forEach((slot) => {
       embedSlots += `🔹 ${slot.name}: ${slot.qtd}\n`;
       const role = message.guild?.roles.cache.find((role) =>
-        role.name.toLowerCase().includes(slot.name.toLowerCase()),
+        role.name.toLowerCase().includes(`vagas ${slot.name.toLowerCase()}`),
       );
       mentionsMessage += role?.toString() + " ";
     });
