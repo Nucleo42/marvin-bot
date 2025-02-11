@@ -42,10 +42,18 @@ export class AnnouncementProjectService {
     const storageData = await this.getStorageData(guildId);
 
     if (storageData) {
+      if (isDev) {
+        this.logger.debug({
+          prefix: "discord-core-announcement-project",
+          message: "Carregando configurações do storage!",
+        });
+      }
       return storageData;
     }
 
     const announcementConfig = await this.getAnnouncementConfig(guildId);
+
+    if (announcementConfig.length === 0) return null;
 
     return announcementConfig[0] as IAnnouncementProjectRepository;
   }
@@ -203,6 +211,13 @@ export class AnnouncementProjectService {
     if (!forum_thread_to_listen || !channel_to_send) return;
 
     if (!this.isValidThread(thread, forum_thread_to_listen)) return;
+
+    if (isDev) {
+      this.logger.debug({
+        prefix: "discord-core-announcement-project",
+        message: "Foi detectado um novo projeto!",
+      });
+    }
 
     const message = await this.getFirstMessage(thread);
     if (!message) return;
