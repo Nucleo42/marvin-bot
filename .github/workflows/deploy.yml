@@ -118,8 +118,10 @@ jobs:
         env:
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GEMINI_URL: ${{ secrets.GEMINI_URL }}
+          GEMINI_URL_API_KEY: ${{ secrets.GEMINI_URL_API_KEY }}
         run: |
-          echo -e "DISCORD_TOKEN=$DISCORD_TOKEN\nNODE_ENV=production\nDATABASE_URL=$DATABASE_URL" > .env
+          echo -e "DISCORD_TOKEN=$DISCORD_TOKEN\nNODE_ENV=production\nDATABASE_URL=$DATABASE_URL\nGEMINI_URL=$GEMINI_URL\nGEMINI_URL_API_KEY=$GEMINI_URL_API_KEY" > .env
 
       - name: Create deployment package
         run: |
