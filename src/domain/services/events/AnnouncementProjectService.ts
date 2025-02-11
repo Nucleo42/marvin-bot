@@ -33,7 +33,7 @@ export class AnnouncementProjectService {
 
   private async getStorageData(guildId: string) {
     return await this.storage.getData<IAnnouncementProjectRepository>(
-      "announcement-react",
+      "announcement-project",
       guildId,
     );
   }
@@ -234,14 +234,14 @@ export class AnnouncementProjectService {
     const processedSlots = await this.processProjectSlots(content, message);
     if (!processedSlots) return;
 
-    const announcement = await this.createAndSendAnnouncement(
+    await this.createAndSendAnnouncement(
       thread,
       message,
       announcementChannel,
       processedSlots,
     );
 
-    await this.processMessageReaction(announcement);
+    //await this.processMessageReaction(announcement);
 
     if (isDev) {
       this.logger.debug({
