@@ -1,22 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { GeminiIA } from "./Gemini";
 import { parseApiTextFromJson } from "@utils/parseApiTextJson";
-
-interface Part {
-  text: string;
-}
-
-interface Content {
-  parts: Part[];
-}
-
-interface Candidate {
-  content: Content;
-}
-
-interface ApiResponse {
-  candidates: Candidate[];
-}
+import { IApiGeminiResponse as ApiResponse } from "@interfaces/GeminiResponse";
 
 interface Slot {
   name: "front-end" | "back-end" | "design" | "dados" | "mobile";
