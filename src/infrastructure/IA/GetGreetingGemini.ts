@@ -16,8 +16,6 @@ export class GetGreetingGemini {
 
     const greeting = this.getGreeting(hour);
 
-    console.log({ weekday, time, greeting });
-
     const body = JSON.stringify({
       contents: [
         {

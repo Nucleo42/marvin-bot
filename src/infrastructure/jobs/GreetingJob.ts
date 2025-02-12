@@ -7,6 +7,7 @@ import { isDev } from "@utils/IsDev";
 import { IGreetingRepository } from "@database/repositories/GreetingRepository";
 import { TextChannel } from "discord.js";
 import { MarvinGreeting } from "@constants/MarvinGreeting";
+import { GetGreetingGemini } from "@infrastructure/IA/GetGreetingGemini";
 
 @injectable()
 export class GreetingJob {
@@ -17,13 +18,14 @@ export class GreetingJob {
     @inject(Logger) private logger: Logger,
     @inject(LevelDB) private storage: LevelDB,
     @inject(ClientDiscord) private client: ClientDiscord,
+    @inject(GetGreetingGemini) private getGreetingGemini: GetGreetingGemini,
   ) {
     this.scheduleTask();
   }
 
   private scheduleTask(): void {
     this.task = cron.schedule(
-      "1 1 6 * * *",
+      "0 6,14,20,23 * * *",
       async () => {
         await this.processGreeting();
       },
@@ -106,9 +108,12 @@ export class GreetingJob {
     }
 
     const greeting = this.selectRandomGreeting();
+    const geminiGreeting = await this.getGreetingGemini.get();
+
+    const message = geminiGreeting?.message || greeting;
 
     if (channel.isSendable()) {
-      await channel.send(greeting);
+      await channel.send(message);
     }
   }
 
