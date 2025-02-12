@@ -22,30 +22,15 @@ export class GetGreetingGemini {
         {
           parts: [
             {
-              text:
-                "Imagine que você é o Marvin, o robô do Guia do Mochileiro das Galáxias, conhecido por seu sarcasmo e humor ácido." +
-                `Sua tarefa é criar uma mensagem de "${greeting}" com seu tom sarcástico característico, levando em conta o dia da semana e o horário.` +
-                "O tom deve ser irônico e cômico, mas sem ser excessivamente pessimista. Deve fazer piadas sobre o dia e o horário, sem soar mecânico.\n\n" +
-                "Aqui estão algumas direções:\n" +
-                "- Segunda-feira: 'Ah, segunda-feira... aquele dia que insiste em existir.'\n" +
-                "- Terça-feira: 'Sabe o que é pior que segunda? Terça. Porque ainda falta muito para o fim de semana.'\n" +
-                "- Quarta-feira: 'Meio da semana... se fosse uma maratona, você só teria corrido a primeira metade.'\n" +
-                "- Quinta-feira: 'Quase lá! Mas 'quase' ainda não é sexta, né?'\n" +
-                "- Sexta-feira: 'Sobrevivemos até aqui! Agora é só aguentar mais um pouco.'\n" +
-                "- Sábado e domingo: 'Final de semana! Ou como eu chamo: o curto intervalo antes da realidade bater novamente.'\n\n" +
-                "Além disso, o horário também afeta o tom:\n" +
-                "- Das 5h às 8h: 'Acordar cedo? Interessante escolha. Provavelmente errada.'\n" +
-                "- Das 8h às 12h: 'O sol está brilhando, os pássaros estão cantando... e você tem que trabalhar. Divirta-se.'\n" +
-                "- Das 12h às 14h: 'Hora do almoço! Esse breve momento de felicidade antes da realidade voltar com tudo.'\n" +
-                "- Das 14h às 18h: 'A boa notícia: metade do dia já foi. A má notícia: ainda tem outra metade.'\n" +
-                "- Das 18h às 22h: 'Parabéns, você sobreviveu ao dia! Agora só precisa sobreviver ao de amanhã.'\n" +
-                "- Das 22h às 5h: 'Ainda acordado? Bom, pelo menos você não está sozinho. A insônia e as preocupações da vida também estão aqui.'\n\n" +
-                `Hoje é ${weekday} e são ${time}, mas eu sei que isso não faz muita diferença para você.` +
-                "Agora gere uma mensagem apropriada para esse contexto de forma natural e evite algo como 'Boa noite. Terça-feira, 22:33. '.\n" +
-                "Me retorne a resposta no seguinte formato JSON:\n" +
-                "{\n" +
-                '  "message": ""\n' +
-                "}\n\n",
+              text: `Como Marvin (Guia do Mochileiro), crie uma mensagem sarcástica de '${greeting}' usando o dia (${weekday}) e horário (${time}). 
+              Regras:\n\n- **Dias**:\n  - Segunda: cansaço irônico.\n  - Terça-quinta: comentários sobre lentidão/progresso.\n  
+              - Sexta: alívio irônico.\n  - Sáb/dom: tempo livre passageiro.\n- **Horários**:\n  
+              - 5h-8h: crítica a acordar cedo.\n  - 8h-12h: ironia sobre trabalho.\n  
+              - 12h-14h: breve felicidade do almoço.\n  
+              - 14h-18h: metade do dia como notícia mista.\n  
+              - 18h-22h: sobrevivência do dia.\n  
+              - 22h-5h: insônia/reflexão.\nMencione horário fluidamente (ex: 'Quase meia-noite...'). Tom natural, sem fórmulas fixas. 
+              Resposta em JSON: { \"message\": \"...\" }`,
             },
           ],
         },
