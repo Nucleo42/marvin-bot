@@ -8,6 +8,7 @@ import { IGreetingRepository } from "@database/repositories/GreetingRepository";
 import { TextChannel } from "discord.js";
 import { MarvinGreeting } from "@constants/MarvinGreeting";
 import { GetGreetingGemini } from "@infrastructure/IA/GetGreetingGemini";
+import { getDayAndTime } from "@utils/getDayAndTime";
 
 @injectable()
 export class GreetingJob {
@@ -25,7 +26,7 @@ export class GreetingJob {
 
   private scheduleTask(): void {
     this.task = cron.schedule(
-      "0 6,14,20,23 * * *",
+      "0 6,14,20 * * *",
       async () => {
         await this.processGreeting();
       },
@@ -105,6 +106,21 @@ export class GreetingJob {
         });
       }
       return;
+    }
+
+    const { hour } = getDayAndTime();
+
+    if (hour > 7) {
+      const random = Math.floor(Math.random() * 100);
+      if (random < 70) {
+        if (isDev) {
+          this.logger.info({
+            prefix: "greeting-job",
+            message: "Não enviando saudação por conta da probabilidade",
+          });
+        }
+        return;
+      }
     }
 
     const greeting = this.selectRandomGreeting();

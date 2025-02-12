@@ -2,6 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { GeminiIA } from "./Gemini";
 import { parseApiTextFromJson } from "@utils/parseApiTextJson";
 import { IApiGeminiResponse } from "@interfaces/GeminiResponse";
+import { getDayAndTime } from "@utils/getDayAndTime";
 
 export interface IGetGreetingGemini {
   message: string;
@@ -12,7 +13,7 @@ export class GetGreetingGemini {
   constructor(@inject(GeminiIA) private readonly gemini: GeminiIA) {}
 
   public async get(): Promise<IGetGreetingGemini | null> {
-    const { weekday, time, hour } = this.getDayAndTime();
+    const { weekday, time, hour } = getDayAndTime();
 
     const greeting = this.getGreeting(hour);
 
@@ -60,22 +61,6 @@ export class GetGreetingGemini {
     const parsed = parseApiTextFromJson(text);
 
     return parsed as IGetGreetingGemini;
-  }
-
-  private getDayAndTime() {
-    const options: Intl.DateTimeFormatOptions = {
-      timeZone: "America/Sao_Paulo",
-      weekday: "long",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    };
-    const now = new Date().toLocaleString("pt-BR", options);
-
-    const [weekday, time] = now.split(" ");
-    const [hour] = time?.split(":").map(Number) ?? [0];
-
-    return { weekday, hour, time };
   }
 
   private getGreeting(hour: number = 6) {
