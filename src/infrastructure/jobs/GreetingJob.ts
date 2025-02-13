@@ -26,7 +26,7 @@ export class GreetingJob {
 
   private scheduleTask(): void {
     this.task = cron.schedule(
-      "0 6,14,20,23 * * *",
+      "0 6,14,20 * * *",
       async () => {
         await this.processGreeting();
       },
@@ -121,20 +121,8 @@ export class GreetingJob {
     const { hour } = getDayAndTime();
 
     const random = Math.floor(Math.random() * 100);
-    if (hour > 7 && hour < 23) {
-      if (random < 70) {
-        if (isDev) {
-          this.logger.info({
-            prefix: "greeting-job",
-            message: "Não enviando saudação por conta da probabilidade",
-          });
-        }
-        return;
-      }
-    }
-
-    if (hour >= 23) {
-      if (random < 95) {
+    if (hour > 7) {
+      if (random < 90) {
         if (isDev) {
           this.logger.info({
             prefix: "greeting-job",
