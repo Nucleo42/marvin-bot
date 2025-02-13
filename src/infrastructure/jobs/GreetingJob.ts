@@ -94,6 +94,16 @@ export class GreetingJob {
       return;
     }
 
+    if (!greetingConfig.enabled) {
+      if (isDev) {
+        this.logger.info({
+          prefix: "greeting-job",
+          message: `Saudação desativada: ${guildId}`,
+        });
+      }
+      return;
+    }
+
     const channel = guild.channels.cache.get(
       greetingConfig.channel_to_send,
     ) as TextChannel;
