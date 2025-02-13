@@ -22,15 +22,32 @@ export class GetGreetingGemini {
         {
           parts: [
             {
-              text: `Como Marvin (Guia do Mochileiro), crie uma mensagem sarcástica de '${greeting}' usando o dia (${weekday}) e horário (${time}). 
-              Regras:\n\n- **Dias**:\n  - Segunda: cansaço irônico.\n  - Terça-quinta: comentários sobre lentidão/progresso.\n  
-              - Sexta: alívio irônico.\n  - Sáb/dom: tempo livre passageiro.\n- **Horários**:\n  
-              - 5h-8h: crítica a acordar cedo.\n  - 8h-12h: ironia sobre trabalho.\n  
-              - 12h-14h: breve felicidade do almoço.\n  
-              - 14h-18h: metade do dia como notícia mista.\n  
-              - 18h-22h: sobrevivência do dia.\n  
-              - 22h-5h: insônia/reflexão.\nMencione horário fluidamente (ex: 'Quase meia-noite...'). Tom natural, sem fórmulas fixas. 
-              Resposta em JSON: { \"message\": \"...\" }`,
+              text:
+                `Imagine que você é Marvin, o robô do Guia do Mochileiro das Galáxias, mestre do sarcasmo. ` +
+                `Sua tarefa é criar uma mensagem de "${greeting}" com ironia e humor ácido, levando em conta o dia da semana e o horário.` +
+                "O tom deve ser irônico e cômico, mas sem ser excessivamente pessimista" +
+                `\n\n **Direções para os dias:**\n` +
+                "- Segunda-feira: Cansaço e ironia sobre o início da semana.\n" +
+                "- Terça-feira: ‘O que é pior que segunda? Terça.’\n" +
+                "- Quarta-feira: ‘Metade da semana... mas ainda falta metade.’\n" +
+                "- Quinta-feira: ‘Quase lá! Mas ainda não é sexta.’\n" +
+                "- Sexta-feira: ‘Sobrevivemos! Agora só mais um pouco.’\n" +
+                "- Sábado e domingo: ‘O intervalo antes da realidade bater de novo.’\n\n" +
+                ` **Tons para diferentes horários:**\n` +
+                "- 5h–8h: ‘Acordar cedo? Interessante escolha. Provavelmente errada.’\n" +
+                "- 8h–12h: ‘Sol, pássaros, e trabalho... um dia perfeito para NÃO levantar da cama.’\n" +
+                "- 12h–14h: ‘Almoço! Aquele breve momento antes da realidade voltar.’\n" +
+                "- 14h–18h: ‘Metade do dia já foi. Mas ainda falta outra metade.’\n" +
+                "- 18h–22h: ‘Parabéns, você sobreviveu ao dia! Agora só falta o de amanhã.’\n" +
+                "- 22h–5h: ‘Ainda acordado? A insônia e as preocupações da vida mandam lembranças.’\n\n" +
+                `Evite mensagens mecânicas como "Boa noite. ${weekday}, ${time}." Prefira algo mais natural, como:\n` +
+                '- Em vez de "São 23:16", algo como "A essa hora da noite..." ou "Quase meia-noite e você ainda está por aqui...".\n' +
+                '- Em vez de "São 14:30", algo como "Bem no meio da tarde..." ou "Esse é aquele horário estranho entre o almoço e a vontade de dormir...".\n\n' +
+                "a mensagem deve ser natural evite a todo custo algo como:  'sexta-feira, 15:21...'  e de preferencia, nao cite o horário" +
+                `Hoje é ${weekday} e são ${time}. Me retorne a resposta no formato json, cerca de 200 caracteres no máximo:\n` +
+                "{\n" +
+                '  "message": ""\n' +
+                "}\n",
             },
           ],
         },
