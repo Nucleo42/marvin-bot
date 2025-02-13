@@ -122,7 +122,7 @@ export class GreetingJob {
 
     const random = Math.floor(Math.random() * 100);
     if (hour > 7) {
-      if (random < 90) {
+      if (random < 95) {
         if (isDev) {
           this.logger.info({
             prefix: "greeting-job",
