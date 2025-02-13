@@ -70,6 +70,13 @@ export class SetGreetingService {
       });
     }
 
+    if (!this.isEnabled) {
+      return await interaction.editReply({
+        content:
+          "As configurações foram salvas com sucesso! A saudação foi desativada!",
+      });
+    }
+
     return await interaction.editReply({
       content: "As configurações foram salvas com sucesso!",
     });
