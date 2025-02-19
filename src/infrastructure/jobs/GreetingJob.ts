@@ -6,9 +6,8 @@ import { ClientDiscord } from "@discord/Client";
 import { isDev } from "@utils/IsDev";
 import { IGreetingRepository } from "@database/repositories/GreetingRepository";
 import { TextChannel } from "discord.js";
-import { MarvinGreeting } from "@constants/MarvinGreeting";
 import { GetGreetingGemini } from "@infrastructure/IA/GetGreetingGemini";
-import { getDayAndTime } from "@utils/getDayAndTime";
+import { formatMessage } from "@utils/formatMessage";
 
 @injectable()
 export class GreetingJob {
@@ -26,7 +25,7 @@ export class GreetingJob {
 
   private scheduleTask(): void {
     this.task = cron.schedule(
-      "0 6,14,20 * * *",
+      "0 6 * * *",
       async () => {
         await this.processGreeting();
       },
@@ -118,42 +117,13 @@ export class GreetingJob {
       return;
     }
 
-    const { hour } = getDayAndTime();
-
-    const random = Math.floor(Math.random() * 100);
-    if (hour > 7) {
-      if (random < 95) {
-        if (isDev) {
-          this.logger.info({
-            prefix: "greeting-job",
-            message: "Não enviando saudação por conta da probabilidade",
-          });
-        }
-        return;
-      }
-    }
-
-    const greeting = this.selectRandomGreeting();
+    const greeting = "**Bom dia!!**";
     const geminiGreeting = await this.getGreetingGemini.get();
 
-    const message = geminiGreeting?.message || greeting;
+    const text = formatMessage(geminiGreeting) || greeting;
 
     if (channel.isSendable()) {
-      await channel.send(message);
+      await channel.send(text);
     }
-  }
-
-  private selectRandomGreeting(): string {
-    const chance = Math.random();
-
-    const listOfWords = MarvinGreeting;
-
-    const selectedWord: string =
-      chance < 0.89
-        ? "Bom dia, polvos!"
-        : listOfWords[Math.floor(Math.random() * listOfWords.length)] ||
-          "Bom dia, valorosos membros!";
-
-    return selectedWord;
   }
 }

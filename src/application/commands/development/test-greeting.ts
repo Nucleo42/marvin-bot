@@ -2,6 +2,7 @@ import { Command } from "@interfaces/discord/Command";
 import { ApplicationCommandType, MessageFlags } from "discord.js";
 import { container } from "tsyringe";
 import { GetGreetingGemini } from "@infrastructure/IA/GetGreetingGemini";
+import { formatMessage } from "@utils/formatMessage";
 
 export default new Command({
   name: "test-greeting",
@@ -25,6 +26,8 @@ export default new Command({
 
     console.log(greeting);
 
-    await interaction.editReply(greeting.message);
+    const text = formatMessage(greeting) || "";
+
+    await interaction.editReply(text);
   },
 });
