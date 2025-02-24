@@ -96,15 +96,9 @@ export class AnnouncementProjectService {
       });
     }
 
-    /* fields.push({
-      name: "📢 Notificação",
-      value: mentionsMessage || "Nenhum",
-      inline: false,
-    }); */
-
     return new EmbedBuilder()
-      .setTitle("🚀 Novo Projeto Criado!")
-      .setDescription("Um novo projeto foi postado no fórum!")
+      .setTitle("🚀 Projeto: Novas Vagas Disponíveis!")
+      .setDescription("Novas vagas de um projeto foram postadas no fórum!")
       .setColor(0x00ff00)
       .addFields(fields)
       .setTimestamp();
