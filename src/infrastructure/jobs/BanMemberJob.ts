@@ -227,8 +227,17 @@ export class BanMemberJob {
     guild: Guild,
     membersToBan: Collection<string, GuildMember>,
   ): Promise<void> {
-    await guild.members.bulkBan(membersToBan, {
+    /* await guild.members.bulkBan(membersToBan, {
       reason: "Violação das regras do servidor (não fez registro).",
+    }); */
+
+    membersToBan.forEach(async (member) => {
+      await guild.members.kick(
+        member,
+        "Violação das regras do servidor (não fez registro).",
+      );
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     });
 
     if (isDev) {
@@ -255,7 +264,7 @@ export class BanMemberJob {
     );
     if (channel?.isSendable()) {
       await channel.send({
-        content: `Membros banidos por não fazer a apresentação: ${bannedMembers.map(
+        content: `Membros expulsos  por não fazer a apresentação: ${bannedMembers.map(
           (user) => `\n${user}`,
         )}`,
       });
