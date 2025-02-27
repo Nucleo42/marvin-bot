@@ -199,49 +199,56 @@ export class AnnouncementProjectService {
   public async execute(thread: ThreadChannel): Promise<void> {
     const configurations = await this.getConfigurations(thread.guildId);
 
-    if (!configurations || !configurations.enabled) return;
+    try {
+      if (!configurations || !configurations.enabled) return;
 
-    const { forum_thread_to_listen, channel_to_send } = configurations;
+      const { forum_thread_to_listen, channel_to_send } = configurations;
 
-    if (!forum_thread_to_listen || !channel_to_send) return;
+      if (!forum_thread_to_listen || !channel_to_send) return;
 
-    if (!this.isValidThread(thread, forum_thread_to_listen)) return;
+      if (!this.isValidThread(thread, forum_thread_to_listen)) return;
 
-    if (isDev) {
-      this.logger.debug({
+      if (isDev) {
+        this.logger.debug({
+          prefix: "discord-core-announcement-project",
+          message: "Foi detectado um novo projeto!",
+        });
+      }
+
+      const message = await this.getFirstMessage(thread);
+      if (!message) return;
+
+      await this.processMessageReaction(message);
+
+      const announcementChannel = this.getAnnouncementChannel(
+        thread,
+        channel_to_send,
+      );
+      if (!announcementChannel) return;
+
+      const content = await this.replaceRoleMentions(message);
+      const processedSlots = await this.processProjectSlots(content, message);
+      if (!processedSlots) return;
+
+      const announcement = await this.createAndSendAnnouncement(
+        thread,
+        message,
+        announcementChannel,
+        processedSlots,
+      );
+
+      await this.processMessageReaction(announcement);
+
+      if (isDev) {
+        this.logger.debug({
+          prefix: "discord-core-announcement-project",
+          message: "Foi enviado o anúncio do projeto!",
+        });
+      }
+    } catch (_error) {
+      this.logger.error({
         prefix: "discord-core-announcement-project",
-        message: "Foi detectado um novo projeto!",
-      });
-    }
-
-    const message = await this.getFirstMessage(thread);
-    if (!message) return;
-
-    await this.processMessageReaction(message);
-
-    const announcementChannel = this.getAnnouncementChannel(
-      thread,
-      channel_to_send,
-    );
-    if (!announcementChannel) return;
-
-    const content = await this.replaceRoleMentions(message);
-    const processedSlots = await this.processProjectSlots(content, message);
-    if (!processedSlots) return;
-
-    const announcement = await this.createAndSendAnnouncement(
-      thread,
-      message,
-      announcementChannel,
-      processedSlots,
-    );
-
-    await this.processMessageReaction(announcement);
-
-    if (isDev) {
-      this.logger.debug({
-        prefix: "discord-core-announcement-project",
-        message: "Foi enviado o anúncio do projeto!",
+        message: `Ocorreu um erro ao enviar o anúncio do projeto! ${_error}`,
       });
     }
   }
