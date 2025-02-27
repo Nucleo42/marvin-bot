@@ -4,6 +4,6 @@ import path from "path";
 import { BASE_PATH } from "@constants/BasePath";
 
 container.register("dbPath", {
-  useValue: path.resolve(BASE_PATH, "infrastructure/storage/.local"),
+  useValue: path.resolve(BASE_PATH, "../.local"),
 });
 container.registerSingleton(LevelDB, LevelDB);
