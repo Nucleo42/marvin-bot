@@ -171,10 +171,8 @@ export class IntroductionListenerService {
       return;
     }
 
-    await Promise.all([
-      member.roles.add([roleVerified, roleMember]),
-      member.roles.remove(rolePending),
-    ]);
+    await member.roles.add([roleVerified, roleMember]);
+    await member.roles.remove(rolePending);
 
     const channel = guild.channels.cache.find(
       (name) => name.name === "📌-como-participar",
