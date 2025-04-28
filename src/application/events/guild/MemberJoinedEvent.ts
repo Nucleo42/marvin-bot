@@ -1,6 +1,7 @@
 import { Event } from "@interfaces/discord/Event";
 import { MemberWelcomeService } from "@services/events/MemberWelcomeService";
 import { AddMemberOnBanService } from "@services/events/AddMemberOnBanListService";
+import { WelcomeMessageChatService } from "@services/events/WelcomeMessageChatService";
 import { container } from "tsyringe";
 
 export default new Event({
@@ -11,5 +12,10 @@ export default new Event({
 
     const memberBanService = container.resolve(AddMemberOnBanService);
     memberBanService.execute(interaction);
+
+    const welcomeMessageChatService = container.resolve(
+      WelcomeMessageChatService,
+    );
+    welcomeMessageChatService.execute(interaction);
   },
 });
