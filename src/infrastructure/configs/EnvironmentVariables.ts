@@ -11,4 +11,9 @@ export default {
     URL: process.env.GEMINI_URL,
     API_KEY: process.env.GEMINI_URL_API_KEY,
   },
+  DM_MESSAGE_FEATURE: {
+    CATEGORY_ID: process.env.DM_MESSAGE_FEATURE_CATEGORY_ID,
+    ADMIN_ROLE_NAME: process.env.DM_MESSAGE_FEATURE_ADMIN_ROLE_NAME,
+    MOD_ROLE_NAME: process.env.DM_MESSAGE_FEATURE_MOD_ROLE_NAME,
+  },
 };
