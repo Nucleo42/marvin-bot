@@ -6,6 +6,7 @@ import { SetGreetingService } from "@services/commands/SetGreetingService";
 import { MemberCountService } from "@services/commands/MemberCountService";
 import { SetAnnouncementProjectService } from "@services/commands/SetAnnouncementProjectService";
 import { SetAnnouncementReactService } from "@services/commands/SetAnnouncementReactService";
+import { CreateDmChatService } from "@services/commands/CreateDmChatService";
 
 container.register(PingService, PingService);
 container.register(SetWelcomeChannelService, SetWelcomeChannelService);
@@ -17,3 +18,4 @@ container.register(
   SetAnnouncementProjectService,
   SetAnnouncementProjectService,
 );
+container.register(CreateDmChatService, CreateDmChatService);
