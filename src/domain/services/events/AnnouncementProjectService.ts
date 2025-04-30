@@ -154,6 +154,11 @@ export class AnnouncementProjectService {
       const role = message.guild?.roles.cache.find((role) =>
         role.name.toLowerCase().includes(`vagas ${slot.name.toLowerCase()}`),
       );
+
+      if (role == undefined || role == null) {
+        return;
+      }
+
       mentionsMessage += role?.toString() + " ";
     });
 
@@ -187,8 +192,12 @@ export class AnnouncementProjectService {
 
     const components = this.createButton(message.url);
 
+    const roleMentionsMessage = processedSlots.mentionsMessage
+      ? `||${processedSlots.mentionsMessage}||`
+      : "";
+
     const sendAnnouncement = await announcementChannel.send({
-      content: `||${processedSlots.mentionsMessage}||`,
+      content: roleMentionsMessage,
       components: [components],
       embeds: [embed],
     });
