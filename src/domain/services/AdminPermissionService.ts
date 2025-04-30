@@ -9,6 +9,9 @@ export class AdminPermissionService {
     "admin",
     "administrator",
     "administrador",
+    "Mod",
+    "moderador",
+    "staff",
   ];
 
   public async hasPermission(data: IPermissionService): Promise<boolean> {
