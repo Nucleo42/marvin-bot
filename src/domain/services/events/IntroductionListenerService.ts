@@ -175,12 +175,12 @@ export class IntroductionListenerService {
     await member.roles.remove(rolePending);
 
     const channel = guild.channels.cache.find(
-      (name) => name.name === "📌-como-participar",
+      (name) => name.name === "📖-guia-da-comunidade",
     );
 
     const botMessage = await interaction.reply({
       content: `Obrigado por se apresentar! Sua validação foi concluída com sucesso! 💜
-      \nPara começar, dê uma passada no canal ${channel ? channel : "**onboarding**"} e saiba tudo sobre os **projetos**!`,
+      \nPara começar, dê uma passada no canal ${channel ? channel : "**📖-guia-da-comunidade**"} e saiba tudo sobre nossa comunidade!`,
     });
 
     await interaction.react("💜");
