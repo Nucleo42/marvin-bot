@@ -9,7 +9,7 @@ export class AdminPermissionService {
     "admin",
     "administrator",
     "administrador",
-    "Mod",
+    "mod",
     "moderador",
     "staff",
   ];
