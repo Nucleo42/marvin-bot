@@ -39,7 +39,7 @@ export class MemberWelcomeService {
     if (config.rulesChannel) {
       buttons.push(
         new ButtonBuilder({
-          label: "Regras",
+          label: "📜Regras",
           url: `https://discord.com/channels/${guildId}/${config.rulesChannel}`,
           style: ButtonStyle.Link,
         }),
@@ -49,7 +49,7 @@ export class MemberWelcomeService {
     if (config.presentationChannel) {
       buttons.push(
         new ButtonBuilder({
-          label: "Apresentação (obrigatória)",
+          label: "👤Apresentação",
           url: `https://discord.com/channels/${guildId}/${config.presentationChannel}`,
           style: ButtonStyle.Link,
         }),
@@ -88,7 +88,7 @@ export class MemberWelcomeService {
 
       if (welcomeChannel?.isSendable()) {
         await welcomeChannel.send({
-          content: `Nucleo 42 te dá as boas-vindas, ${interaction.user}! Por favor, apresente-se${presentationChannelObj ? ` e deixe suas redes lá no canal ${presentationChannelObj}` : "!"} `,
+          content: `Nucleo 42 te dá as boas-vindas, ${interaction.user}! Para validar sua entrada, é obrigatório se apresentar no canal ${presentationChannelObj}. Se quiser, você também pode deixar suas redes por lá. `,
           files: [welcomeCard],
           components: [actionButtons],
         });

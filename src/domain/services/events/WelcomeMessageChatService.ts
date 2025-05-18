@@ -15,13 +15,15 @@ export class WelcomeMessageChatService {
 
       const welcomeMessage =
         `A Núcleo 42 dá as boas-vindas a você, **${interaction.user.username}**! \n\n` +
-        `**Esta é uma mensagem de orientação para te ajudar a se localizar no nosso servidor:**\n\n` +
-        `1. Faça uma breve apresentação no canal: https://discord.com/channels/1242113182126833805/1322243132376481836 \n` +
-        `2. Leia o nosso guia de onboarding para entender como tudo funciona: https://discord.com/channels/1242113182126833805/1368608692739641494 \n` +
-        `3. Entenda como funcionam os projetos e como você pode participar: https://discord.com/channels/1242113182126833805/1368599312354906175 \n` +
+        `**Aqui estão os primeiros passos para você se integrar à nossa comunidade:**\n\n` +
+        `1. **Conte um pouco sobre você no canal de apresentações!** É essencial para conhecermos você e confirmarmos seu acesso. \n` +
+        `https://discord.com/channels/1242113182126833805/1322243132376481836 \n` +
+        `2. **Leia o nosso guia** de onboarding para entender como tudo funciona: https://discord.com/channels/1242113182126833805/1368608692739641494 \n` +
+        `3. Entenda como funcionam os **projetos** e como **você pode participar**: https://discord.com/channels/1242113182126833805/1368599312354906175 \n` +
         `4. Ative a opção **Mostrar todos os canais** para acessar todo o conteúdo:\n` +
         `   - Clique no nome **Núcleo 42** no canto superior esquerdo.\n` +
-        `   - Depois, selecione **Mostrar todos os canais**.\n\n`;
+        `   - Depois, selecione **Mostrar todos os canais**.\n\n` +
+        `⚠️  **Atenção:** Sua permanência no servidor depende da sua apresentação. Membros que não se apresentarem serão removidos automaticamente pelo bot. Qualquer dúvida, estamos aqui para ajudar! `;
 
       await interaction.send(welcomeMessage);
       await interaction.send({
